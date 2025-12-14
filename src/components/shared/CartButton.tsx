@@ -1,0 +1,60 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import { FaShoppingBag } from 'react-icons/fa';
+import gsap from 'gsap';
+import { useCart } from '@/context/CartContext';
+import CartDrawer from './CartDrawer';
+
+export default function CartButton() {
+  const { cart } = useCart();
+  const [isMounted, setIsMounted] = useState(false);
+  const [isCartOpen, setCartOpen] = useState(false);
+  const cartRef = useRef<HTMLDivElement>(null);
+
+  const cartCount =
+    cart?.lines.reduce((total, item) => total + item.quantity, 0) || 0;
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (cartRef.current && isMounted && cartCount > 0) {
+      gsap.fromTo(
+        cartRef.current,
+        { scale: 1 },
+        {
+          scale: 1.15,
+          duration: 0.25,
+          yoyo: true,
+          repeat: 1,
+          ease: 'power1.out',
+        }
+      );
+    }
+  }, [cartCount, isMounted]);
+
+  return (
+    <>
+      <div
+        ref={cartRef}
+        onClick={() => setCartOpen(true)}
+        className="relative bg-gray-200 rounded-full p-3 cursor-pointer 
+          transition-all duration-300 
+          ease-[cubic-bezier(0.68,-0.55,0.27,1.55)] 
+          hover:scale-110 hover:shadow-lg 
+          active:scale-95 active:shadow-inner 
+          hover:bg-amber-400"
+      >
+        <FaShoppingBag className="text-xl text-gray-800" />
+        {isMounted && cartCount > 0 && (
+          <span className="absolute -top-1 -right-1 text-[13px] bg-red-500 text-white px-1.5 rounded-full shadow-md">
+            {cartCount}
+          </span>
+        )}
+      </div>
+      <CartDrawer isOpen={isCartOpen} onClose={() => setCartOpen(false)} />
+    </>
+  );
+}

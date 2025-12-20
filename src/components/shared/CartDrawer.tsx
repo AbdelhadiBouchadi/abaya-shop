@@ -129,7 +129,7 @@ export default function CartDrawer({
                     <span className="text-sm font-medium line-clamp-2 text-[#9d5035]">
                       {item.merchandise.product.title}
                     </span>
-                    {/* ... rest of item details ... */}
+
                     <div className="flex items-center gap-2 mt-1">
                       <button
                         onClick={() =>
@@ -148,7 +148,7 @@ export default function CartDrawer({
                         +
                       </button>
                       <span className="text-xs text-gray-600">
-                        {item.quantity} × {item.cost.totalAmount.currencyCode} $
+                        {item.quantity} × {item.cost.totalAmount.currencyCode}{' '}
                         {unitPrice.toFixed(2)}
                       </span>
                     </div>
@@ -173,15 +173,15 @@ export default function CartDrawer({
             <div className="flex justify-between text-sm font-medium text-[#9d5035]">
               <span>Total:</span>
               <span>
-                {currencyCode} ${totalPrice.toFixed(2)}
+                {currencyCode} {totalPrice.toFixed(2)}
               </span>
             </div>
             <Link href="/checkout" passHref>
               <button
                 onClick={onClose}
-                className="w-full cursor-pointer bg-[#9d5035] text-white py-2 rounded-full text-sm font-semibold hover:bg-[#8a462f] transition"
+                className="w-full cursor-pointer bg-[#9d5035] text-white py-2 rounded-xl text-sm font-semibold hover:bg-[#8a462f] transition"
               >
-                Go to Checkout
+                Continuer
               </button>
             </Link>
           </div>

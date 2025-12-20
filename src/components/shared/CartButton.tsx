@@ -50,7 +50,7 @@ export default function CartButton() {
       >
         <FaShoppingBag className="text-lg font-light text-gray-200" />
         {isMounted && cartCount > 0 && (
-          <span className="absolute -top-1 -right-1 text-[13px] bg-red-500 text-white px-1.5 rounded-full shadow-md">
+          <span className="absolute -top-1 -right-1 text-[13px] bg-[#9d5035] text-gray-200 px-1.5 rounded-full shadow-md">
             {cartCount}
           </span>
         )}

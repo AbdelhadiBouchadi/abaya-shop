@@ -1,7 +1,20 @@
 'use client';
+
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Cart, CartItem, Product, ProductVariant } from '@/lib/shopify/types';
-import { createContext, use, useContext, useMemo, useOptimistic } from 'react';
+import {
+  createContext,
+  use,
+  useContext,
+  useMemo,
+  useOptimistic,
+  useState,
+  startTransition,
+} from 'react';
+import {
+  updateItemQuantity,
+  removeItem,
+} from '@/components/shared/Cart/actions';
 
 type UpdateType = 'plus' | 'minus' | 'delete';
 
@@ -9,7 +22,11 @@ type CartContextType = {
   cart: Cart | undefined;
   updateCartItem: (merchandiseId: string, updateType: UpdateType) => void;
   addCartItem: (variant: ProductVariant, product: Product) => void;
+  isOpen: boolean;
+  openCart: () => void;
+  closeCart: () => void;
 };
+
 type CartAction =
   | {
       type: 'UPDATE_ITEM';
@@ -40,7 +57,7 @@ function calculateItemCost(quantity: number, price: string): string {
   return (Number(price) * quantity).toString();
 }
 
-function updateCartItem(
+function updateCartItemReducer(
   item: CartItem,
   updateType: UpdateType
 ): CartItem | null {
@@ -131,7 +148,7 @@ function cartReducer(state: Cart | undefined, action: CartAction): Cart {
       const updatedLines = currentCart.lines
         .map((item) =>
           item.merchandise.id === merchandiseId
-            ? updateCartItem(item, updateType)
+            ? updateCartItemReducer(item, updateType)
             : item
         )
         .filter(Boolean) as CartItem[];
@@ -195,15 +212,56 @@ export function CartProvider({
     cartReducer
   );
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openCart = () => setIsOpen(true);
+  const closeCart = () => setIsOpen(false);
+
+  // --- THE FIX IS HERE ---
   const updateCartItem = (merchandiseId: string, updateType: UpdateType) => {
-    updateOptimisticCart({
-      type: 'UPDATE_ITEM',
-      payload: { merchandiseId, updateType },
+    // 1. Get current item to calculate payload for server
+    const item = optimisticCart?.lines.find(
+      (line) => line.merchandise.id === merchandiseId
+    );
+
+    if (!item) return;
+
+    // 2. Wrap everything in startTransition
+    startTransition(async () => {
+      // A. Optimistic Update (Immediate UI feedback)
+      updateOptimisticCart({
+        type: 'UPDATE_ITEM',
+        payload: { merchandiseId, updateType },
+      });
+
+      // B. Server Action (Actual data persistence)
+      try {
+        if (updateType === 'delete') {
+          await removeItem(null, merchandiseId);
+        } else if (updateType === 'plus') {
+          await updateItemQuantity(null, {
+            merchandiseId,
+            quantity: item.quantity + 1,
+          });
+        } else if (updateType === 'minus') {
+          await updateItemQuantity(null, {
+            merchandiseId,
+            quantity: item.quantity - 1,
+          });
+        }
+      } catch (e) {
+        // If server action fails, the revalidation (or lack thereof)
+        // will naturally sync the cart back to truth on next refresh.
+        console.error('Error updating cart:', e);
+      }
     });
   };
 
   const addCartItem = (variant: ProductVariant, product: Product) => {
-    updateOptimisticCart({ type: 'ADD_ITEM', payload: { variant, product } });
+    startTransition(() => {
+      updateOptimisticCart({ type: 'ADD_ITEM', payload: { variant, product } });
+    });
+    openCart();
   };
 
   const value = useMemo(
@@ -211,8 +269,11 @@ export function CartProvider({
       cart: optimisticCart,
       updateCartItem,
       addCartItem,
+      isOpen,
+      openCart,
+      closeCart,
     }),
-    [optimisticCart]
+    [optimisticCart, isOpen]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
@@ -220,10 +281,8 @@ export function CartProvider({
 
 export function useCart() {
   const context = useContext(CartContext);
-
   if (context === undefined) {
     throw new Error('useCart must be used within a CartProvider');
   }
-
   return context;
 }

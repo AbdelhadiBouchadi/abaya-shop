@@ -65,7 +65,9 @@ export default async function TagPage({
 
       {products.length === 0 ? (
         <div className="py-24 text-center font-text text-[#5D4037] opacity-80">
-          <p className="text-lg">Aucun produit trouvé pour "{displayTitle}".</p>
+          <p className="text-lg">
+            Aucun produit trouvé pour <em>{displayTitle}</em>.
+          </p>
         </div>
       ) : (
         <AnimatedProductGrid products={products} />

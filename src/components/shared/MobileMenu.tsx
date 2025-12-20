@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Link } from 'next-view-transitions';
 import Image from 'next/image';
+import { createPortal } from 'react-dom'; // Import Portal
 import { HiX, HiChevronDown, HiMenuAlt2 } from 'react-icons/hi';
 import gsap from 'gsap';
 import { Menu } from '@/lib/shopify/types';
@@ -98,8 +99,15 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false); // Add mounted state for Portal
+
   const menuRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
+
+  // Ensure client-side mounting for Portal
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Close menu on route change
   useEffect(() => {
@@ -108,6 +116,7 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
 
   // Drawer Animation
   useEffect(() => {
+    // Only run GSAP if refs are attached (which happens after Portal renders)
     if (menuRef.current && backdropRef.current) {
       if (isOpen) {
         document.body.style.overflow = 'hidden';
@@ -140,10 +149,11 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isOpen]);
+  }, [isOpen]); // Only rerun when isOpen changes
 
   return (
     <>
+      {/* Trigger Button (Stays in Header) */}
       <div className="lg:hidden">
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -154,78 +164,85 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
         </button>
       </div>
 
-      {/* Backdrop */}
-      <div
-        ref={backdropRef}
-        className="fixed inset-0 bg-black/40 z-90 backdrop-blur-sm lg:hidden opacity-0 pointer-events-none"
-        style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
-        onClick={() => setIsOpen(false)}
-      />
-
-      {/* Menu Drawer */}
-      <div
-        ref={menuRef}
-        className="fixed top-0 left-0 h-full w-[85vw] max-w-sm bg-white shadow-2xl z-100 
-          flex flex-col opacity-0 -translate-x-full lg:hidden"
-      >
-        {/* Header with logo & Close */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-[#F5F5F0]/50">
-          <Link href="/" onClick={() => setIsOpen(false)}>
-            <Image
-              src="/logo.jpg"
-              alt="Waliliya logo"
-              width={50}
-              height={50}
-              className="rounded-xl"
+      {/* Portal Content (Moved to document.body) */}
+      {mounted &&
+        createPortal(
+          <>
+            {/* Backdrop */}
+            <div
+              ref={backdropRef}
+              className="fixed inset-0 bg-black/40 z-998 backdrop-blur-sm lg:hidden opacity-0 pointer-events-none"
+              style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
+              onClick={() => setIsOpen(false)}
             />
-          </Link>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="p-2 text-gray-500 hover:text-[#9d5035]"
-          >
-            <HiX className="text-2xl" />
-          </button>
-        </div>
 
-        {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
-          {/* 1. Integrated Search */}
-          <div className="mb-8">
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
-              Recherche
-            </p>
-            <Search />
-          </div>
-
-          {/* 2. Navigation Tree */}
-          <div className="mb-8">
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
-              Menu
-            </p>
-            <ul className="space-y-1">
-              {menu.map((item) => (
-                <MenuItemTree key={item.title} item={item} />
-              ))}
-            </ul>
-          </div>
-
-          {/* 3. Extra Links (Optional) */}
-          <div className="mt-auto border-t border-gray-100 pt-6">
-            <Link
-              href="/contact"
-              className="block py-2 text-sm text-gray-600 hover:text-[#9d5035]"
+            {/* Menu Drawer */}
+            <div
+              ref={menuRef}
+              className="fixed top-0 left-0 h-full w-[85vw] max-w-sm bg-white shadow-2xl z-999 
+              flex flex-col opacity-0 -translate-x-full lg:hidden"
             >
-              Contactez-nous
-            </Link>
-            <Link
-              href="/about-us"
-              className="block py-2 text-sm text-gray-600 hover:text-[#9d5035]"
-            >
-              La créatrice
-            </Link>
-          </div>
-        </div>
-      </div>
+              {/* Header with logo & Close */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-[#F5F5F0]/50">
+                <Link href="/" onClick={() => setIsOpen(false)}>
+                  <Image
+                    src="/logo.jpg"
+                    alt="Waliliya logo"
+                    width={50}
+                    height={50}
+                    className="rounded-xl"
+                  />
+                </Link>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="p-2 text-gray-500 hover:text-[#9d5035]"
+                >
+                  <HiX className="text-2xl" />
+                </button>
+              </div>
+
+              {/* Scrollable Content */}
+              <div className="flex-1 overflow-y-auto p-6 scrollbar-hide">
+                {/* 1. Integrated Search */}
+                <div className="mb-8">
+                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
+                    Recherche
+                  </p>
+                  <Search />
+                </div>
+
+                {/* 2. Navigation Tree */}
+                <div className="mb-8">
+                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
+                    Menu
+                  </p>
+                  <ul className="space-y-1">
+                    {menu.map((item) => (
+                      <MenuItemTree key={item.title} item={item} />
+                    ))}
+                  </ul>
+                </div>
+
+                {/* 3. Extra Links (Optional) */}
+                <div className="mt-auto border-t border-gray-100 pt-6">
+                  <Link
+                    href="/contact"
+                    className="block py-2 text-sm text-gray-600 hover:text-[#9d5035]"
+                  >
+                    Contactez-nous
+                  </Link>
+                  <Link
+                    href="/about-us"
+                    className="block py-2 text-sm text-gray-600 hover:text-[#9d5035]"
+                  >
+                    La créatrice
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </>,
+          document.body
+        )}
     </>
   );
 }

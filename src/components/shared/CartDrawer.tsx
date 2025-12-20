@@ -2,11 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { FaTimes, FaTrash } from 'react-icons/fa';
-import Link from 'next/link';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { useCart } from '@/context/CartContext';
 import { createPortal } from 'react-dom';
+import { Link } from 'next-view-transitions';
 
 export default function CartDrawer({
   isOpen,

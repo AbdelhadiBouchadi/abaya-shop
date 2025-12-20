@@ -28,23 +28,49 @@ const CollectionCard = ({
 
   useGSAP(
     () => {
-      // Parallax Effect for the image
-      if (imageRef.current) {
-        gsap.fromTo(
-          imageRef.current,
-          { y: '-10%' },
-          {
-            y: '10%',
-            ease: 'none',
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: true,
-            },
-          }
-        );
-      }
+      const mm = gsap.matchMedia();
+
+      // 1. Standard Motion: Parallax Effect
+      // Runs only if the user has NOT requested reduced motion
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        if (imageRef.current) {
+          gsap.fromTo(
+            imageRef.current,
+            { y: '-10%' },
+            {
+              y: '10%',
+              ease: 'none',
+              scrollTrigger: {
+                trigger: containerRef.current,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true,
+              },
+            }
+          );
+        }
+      });
+
+      // Runs if the user HAS requested reduced motion (accessibility)
+      mm.add('(prefers-reduced-motion: reduce)', () => {
+        if (imageRef.current) {
+          gsap.fromTo(
+            imageRef.current,
+            { opacity: 0, scale: 1.05 },
+            {
+              opacity: 1,
+              scale: 1,
+              duration: 1.5,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: containerRef.current,
+                start: 'top 85%',
+                toggleActions: 'play none none reverse',
+              },
+            }
+          );
+        }
+      });
     },
     { scope: containerRef }
   );

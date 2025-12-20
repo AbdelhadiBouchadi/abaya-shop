@@ -48,7 +48,7 @@ export default function CartButton() {
           hover:bg-[#9d5035]
           bg-[#b88d6a]"
       >
-        <FaShoppingBag className="text-xl text-gray-800" />
+        <FaShoppingBag className="text-lg font-light text-gray-200" />
         {isMounted && cartCount > 0 && (
           <span className="absolute -top-1 -right-1 text-[13px] bg-red-500 text-white px-1.5 rounded-full shadow-md">
             {cartCount}

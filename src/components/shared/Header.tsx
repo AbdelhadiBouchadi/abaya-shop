@@ -38,7 +38,7 @@ export default function Header({ menu }: { menu: Menu[] }) {
             </div>
 
             {/* Logo - Center on mobile, Left on desktop */}
-            <div className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 z-10">
+            <div className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 z-10 ">
               <Link href="/">
                 <Image
                   src="/logo.jpg"
@@ -46,14 +46,13 @@ export default function Header({ menu }: { menu: Menu[] }) {
                   width={60}
                   height={60}
                   priority
-                  className="rounded-2xl"
+                  className="rounded-2xl transition-all duration-300 
+          ease-[cubic-bezier(0.68,-0.55,0.27,1.55)] 
+          hover:scale-110 hover:shadow-lg"
                 />
               </Link>
             </div>
 
-            {/* Desktop Navigation - Center (Full Width Container) */}
-            {/* We use pointer-events-none on the wrapper so it doesn't block clicks on the sides, 
-                then pointer-events-auto on the nav itself. */}
             <div className="absolute inset-x-0 top-0 h-full hidden lg:flex justify-center items-center pointer-events-none">
               <div className="pointer-events-auto h-full flex items-center">
                 <DesktopNav menu={menu} />

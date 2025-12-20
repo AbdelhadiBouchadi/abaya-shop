@@ -105,7 +105,9 @@ export default function Search() {
             if (!isExpanded) setTimeout(() => inputRef.current?.focus(), 100);
           }
         }}
-        className="p-2 text-[#b88d6a] hover:text-[#9d5035] transition-colors cursor-pointer shrink-0 z-10"
+        className="p-2 text-[#b88d6a] hover:text-[#9d5035]  cursor-pointer shrink-0 z-10 transition-all duration-300 
+          ease-[cubic-bezier(0.68,-0.55,0.27,1.55)] 
+          hover:scale-110 hover:shadow-lg"
         aria-label="Search"
       >
         <HiSearch className="h-6 w-6" />

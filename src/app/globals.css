@@ -130,7 +130,6 @@
   /* Prevent horizontal overflow and ensure proper z-index stacking */
   html,
   body {
-    @apply overflow-x-hidden;
     max-width: 100vw;
     position: relative;
   }

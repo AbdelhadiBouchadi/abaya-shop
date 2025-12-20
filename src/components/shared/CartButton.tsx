@@ -40,12 +40,13 @@ export default function CartButton() {
       <div
         ref={cartRef}
         onClick={() => setCartOpen(true)}
-        className="relative bg-gray-200 rounded-full p-3 cursor-pointer 
+        className="relative rounded-2xl p-3 cursor-pointer 
           transition-all duration-300 
           ease-[cubic-bezier(0.68,-0.55,0.27,1.55)] 
           hover:scale-110 hover:shadow-lg 
           active:scale-95 active:shadow-inner 
-          hover:bg-amber-400"
+          hover:bg-[#9d5035]
+          bg-[#b88d6a]"
       >
         <FaShoppingBag className="text-xl text-gray-800" />
         {isMounted && cartCount > 0 && (

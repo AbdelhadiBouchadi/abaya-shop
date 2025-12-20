@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import { Gotham } from '@/app/fonts';
+import { LibreBaskerville, MerriWeather, OpenSans } from '@/app/fonts';
 import { Toaster } from 'sonner';
 import ClientProviders from './ClientProviders';
-import PageTransitionWrapper from '@/components/shared/PageTransitionWrapper';
 import { cookies } from 'next/headers';
 import { getCart } from '@/lib/shopify';
-import Header from '@/components/shared/Header';
 import Footer from '@/components/shared/Footer';
+import SmoothScroll from '@/components/shared/SmoothScroll';
+import HeaderServerWrapper from '@/components/shared/HeaderServerWrapper';
+import { ViewTransitions } from 'next-view-transitions';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -25,19 +26,23 @@ export default async function RootLayout({
   const cart = getCart(cartId);
 
   return (
-    <html lang="en" className={`${Gotham.variable}`}>
-      <body className="min-h-screen flex flex-col font-gotham">
-        <ClientProviders cart={cart}>
-          <Header />
+    <ViewTransitions>
+      <html
+        lang="en"
+        className={`${LibreBaskerville.variable} ${OpenSans.variable} ${MerriWeather.variable}`}
+      >
+        <SmoothScroll>
+          <body className="min-h-screen flex flex-col">
+            <ClientProviders cart={cart}>
+              <HeaderServerWrapper />
+              <main className="grow">{children}</main>
 
-          <PageTransitionWrapper>
-            <main className="grow container">{children}</main>
-          </PageTransitionWrapper>
-
-          <Footer />
-        </ClientProviders>
-        <Toaster richColors />
-      </body>
-    </html>
+              <Footer />
+            </ClientProviders>
+            <Toaster richColors />
+          </body>
+        </SmoothScroll>
+      </html>
+    </ViewTransitions>
   );
 }

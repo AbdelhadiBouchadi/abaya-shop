@@ -1,18 +1,17 @@
-import FeaturesProducts from '@/components/shared/FeaturedProducts';
+import AtmosphereSection from '@/components/shared/Home/AtmosphereSection';
+import CollectionsProducts from '@/components/shared/Home/CollectionsSection';
 import HeroSection from '@/components/shared/Home/HeroSection';
-import LogoTicker from '@/components/shared/LogoTicker';
-import { getProducts } from '@/lib/shopify';
+import { getCollections } from '@/lib/shopify';
 
 export default async function Home() {
-  const featuredProducts = await getProducts({ query: 'tag:featured' });
-
-  console.log(featuredProducts.length);
+  const collections = await getCollections();
+  const filteredCollections = collections.filter((c) => c.handle !== '');
 
   return (
-    <section className="w-full py-10">
+    <section className="w-full">
       <HeroSection />
-      <LogoTicker />
-      <FeaturesProducts products={featuredProducts} />
+      <CollectionsProducts collections={filteredCollections} />
+      <AtmosphereSection videoId="sVxWQkWfmUs" />
     </section>
   );
 }

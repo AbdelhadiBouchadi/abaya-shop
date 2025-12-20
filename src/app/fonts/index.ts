@@ -1,4 +1,23 @@
 import localFont from 'next/font/local';
+import { Libre_Baskerville, Open_Sans, Merriweather } from 'next/font/google';
+
+export const LibreBaskerville = Libre_Baskerville({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-title',
+});
+
+export const OpenSans = Open_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-subtitle',
+});
+
+export const MerriWeather = Merriweather({
+  subsets: ['latin'],
+  weight: ['300', '400', '700', '900'],
+  variable: '--font-text',
+});
 
 export const Gotham = localFont({
   src: [

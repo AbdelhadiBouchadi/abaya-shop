@@ -1,15 +1,13 @@
 export type Menu = {
   title: string;
-  path: string;
+  url: string;
+  items?: Menu[];
 };
 
 export type ShopifyMenuOperation = {
   data: {
     menu?: {
-      items: {
-        title: string;
-        url: string;
-      }[];
+      items: Menu[];
     };
   };
   variables: {
@@ -99,6 +97,7 @@ export type ShopifyCollection = {
   title: string;
   description: string;
   seo: SEO;
+  image: Image;
   updatedAt: string;
 };
 

@@ -1,70 +1,81 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { NavbarItem } from '../../../data';
-import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 import Link from 'next/link';
-import { gsap } from 'gsap';
+import { Menu } from '@/lib/shopify/types';
+import { ChevronDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-export default function DesktopNav() {
-  const pathname = usePathname();
-
-  const indicatorRef = useRef<HTMLDivElement>(null);
-  const navContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const activeLink = document.querySelector(
-      `a[data-active="true"]`
-    ) as HTMLElement;
-    const container = navContainerRef.current;
-
-    if (activeLink && container && indicatorRef.current) {
-      const linkBox = activeLink.getBoundingClientRect();
-      const containerBox = container.getBoundingClientRect();
-      const offset = linkBox.left - containerBox.left;
-
-      gsap.to(indicatorRef.current, {
-        x: offset,
-        width: linkBox.width,
-        duration: 0.4,
-        ease: 'power3.out',
-      });
-    } else {
-      // 🔥 fallback: ซ่อนไว้ถ้าไม่มี active link
-      gsap.to(indicatorRef.current, {
-        width: 0,
-        duration: 0.2,
-      });
-    }
-  }, [pathname]);
+export default function DesktopNav({ menu }: { menu: Menu[] }) {
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   return (
-    <nav className="hidden xl:flex items-center text-base">
-      <div
-        ref={navContainerRef}
-        className="relative bg-white font-medium rounded-full flex items-center gap-2 px-1 py-1"
-      >
-        <div
-          ref={indicatorRef}
-          className="absolute top-0 left-0 h-full bg-gray-900 rounded-full z-0"
-          style={{ width: 0 }}
-        />
-        {NavbarItem.map((nav) => {
-          const isActive = pathname === nav.path;
-          return (
+    <nav className="hidden lg:flex items-center gap-8 text-sm h-full">
+      {menu.map((item: Menu) => {
+        // Safe check for items
+        const hasSubMenu = item.items && item.items.length > 0;
+
+        return (
+          <div
+            key={item.title}
+            // STATIC position allows the absolute dropdown to position relative to the Header wrapper
+            className="group static h-full flex items-center"
+            onMouseEnter={() => setHoveredItem(item.title)}
+            onMouseLeave={() => setHoveredItem(null)}
+          >
             <Link
-              key={nav.path}
-              href={nav.path}
-              data-active={isActive ? 'true' : 'false'}
-              className="relative px-6 py-2 flex items-center justify-center rounded-full text-sm font-medium z-10 text-black"
+              href={item.url}
+              className="flex items-center gap-1 text-[#b88d6a] hover:text-[#9d5035] transition-colors font-medium uppercase tracking-wide py-4 relative z-10"
             >
-              <span className={isActive ? 'text-white' : 'text-black'}>
-                {nav.title}
-              </span>
+              {item.title}
+              {hasSubMenu && (
+                <ChevronDown
+                  className={cn(
+                    'h-4 w-4 transition-transform duration-300',
+                    hoveredItem === item.title ? '-rotate-180' : 'rotate-0'
+                  )}
+                />
+              )}
             </Link>
-          );
-        })}
-      </div>
+
+            {/* Full Width Dropdown */}
+            {hasSubMenu && (
+              <div
+                className={cn(
+                  'absolute top-full left-0 w-full pt-2 transition-all duration-300 ease-in-out z-0',
+                  hoveredItem === item.title
+                    ? 'opacity-100 visible translate-y-0'
+                    : 'opacity-0 invisible -translate-y-2 pointer-events-none'
+                )}
+              >
+                {/* Dropdown Content Styling */}
+                <div className="bg-background/95 backdrop-blur-xl border border-[#b88d6a]/20 w-full py-8 rounded-2xl shadow-xl">
+                  {/* Added 'flex justify-center' here to center the grid block.
+                      Added 'font-title' for correct font application.
+                  */}
+                  <div className="mx-auto max-w-7xl px-8 flex justify-center font-title">
+                    {/* Added 'text-center' to center the links within their grid cells.
+                        Increased gap for better centering aesthetics.
+                    */}
+                    <div className="grid grid-cols-4 gap-12 text-center">
+                      {(item.items || []).map((subItem) => (
+                        <div key={subItem.title} className="space-y-3">
+                          <Link
+                            href={subItem.url}
+                            className="block text-base font-semibold text-[#3E2723] hover:text-[#9d5035] transition-colors mb-2"
+                          >
+                            {subItem.title}
+                          </Link>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
     </nav>
   );
 }

@@ -25,22 +25,31 @@ export const FadeIn = ({
 
   useGSAP(
     () => {
-      gsap.fromTo(
-        containerRef.current,
-        { opacity: 0, y: 20 }, // Start state
-        {
+      const mm = gsap.matchMedia();
+
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        gsap.to(containerRef.current, {
+          duration: 5,
           opacity: 1,
+          ease: 'back.out(1.1)',
           y: 0,
-          duration: 1.5,
-          ease: 'power2.out',
+          ...vars,
           scrollTrigger: {
             trigger: containerRef.current,
             start,
-            toggleActions: 'play none none reverse',
           },
-          ...vars, // Overwrite with props
-        }
-      );
+        });
+      });
+
+      mm.add('(prefers-reduced-motion: reduce)', () => {
+        gsap.to(containerRef.current, {
+          duration: 0.5,
+          opacity: 1,
+          ease: 'none',
+          y: 0,
+          stagger: 0,
+        });
+      });
     },
     { scope: containerRef }
   );

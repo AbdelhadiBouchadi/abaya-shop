@@ -132,7 +132,7 @@ export default function CollectionsProducts({
             <RevealText
               text="Collections Signatures"
               tagName="h2"
-              className="font-title text-5xl text-[#3E2723] md:text-6xl lg:text-7xl"
+              className="font-title text-3xl text-[#3E2723] md:text-6xl lg:text-7xl"
             />
           </div>
 

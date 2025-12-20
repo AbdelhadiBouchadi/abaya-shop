@@ -37,19 +37,22 @@ export default function HeroSection() {
       className="relative h-screen min-h-150 w-full overflow-hidden bg-[#F5F5F0]"
     >
       {/* --- Background Image --- */}
-      <div className="absolute inset-0 h-full w-full">
+      <FadeIn
+        vars={{ scale: 1, opacity: 0.7 }}
+        className="absolute inset-0 opacity-0 motion-safe:scale-125"
+      >
         <Image
           ref={imageRef}
           src="/hero/hero-image.jpg"
           alt="Collection Waliliya - Élégance et Modestie"
           fill
           priority
-          className="object-fill object-center opacity-90"
+          className="object-fill motion-reduce:opacity-50"
         />
         {/* Soft Overlay to ensure text readability (Beige/Warm tint) */}
         <div className="absolute inset-0 bg-[#3E2723]/10 mix-blend-multiply" />
         <div className="absolute inset-0 bg-linear-to-t from-[#F5F5F0]/20 via-transparent to-transparent" />
-      </div>
+      </FadeIn>
 
       {/* --- Content --- */}
       <Bounded className="relative flex h-full flex-col justify-center pt-20">

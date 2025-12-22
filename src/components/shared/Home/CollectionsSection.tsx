@@ -144,7 +144,7 @@ export default function CollectionsProducts({
   collections: Collection[];
 }) {
   return (
-    <Bounded className="bg-white py-20 md:py-32">
+    <Bounded className=" py-20 md:py-32">
       <div className="relative mx-auto space-y-16 md:space-y-24">
         {/* Section Header */}
         <div className="space-y-6 text-center">

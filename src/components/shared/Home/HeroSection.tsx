@@ -27,6 +27,19 @@ export default function HeroSection() {
           ease: 'power2.out',
         }
       );
+
+      gsap.to(containerRef.current, {
+        scrollTrigger: {
+          trigger: document.body,
+          start: 'top top',
+          end: '+=200',
+          scrub: true,
+        },
+        width: '95%',
+        borderBottomLeftRadius: '2rem',
+        borderBottomRightRadius: '2rem',
+        ease: 'power1.out',
+      });
     },
     { scope: containerRef }
   );
@@ -34,7 +47,7 @@ export default function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative h-screen min-h-150 w-full overflow-hidden bg-[#F5F5F0]"
+      className="relative h-screen min-h-150 w-full overflow-hidden mx-auto"
     >
       {/* --- Background Image --- */}
       <FadeIn

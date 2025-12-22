@@ -15,6 +15,11 @@ export function ProductMedia({ images }: { images: ShopifyImage[] }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // --- FIX: RESET INDEX WHEN COLOR CHANGES ---
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [images]);
+
   // Touch handling for swipe
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -70,7 +75,7 @@ export function ProductMedia({ images }: { images: ShopifyImage[] }) {
                 alt={image.altText || 'Product Image'}
                 fill
                 priority={i === 0}
-                className="object-contain" // Ensures whole image is visible
+                className="object-contain"
                 sizes="(min-width: 1024px) 50vw, 100vw"
               />
             </div>
@@ -160,7 +165,7 @@ export function ProductMedia({ images }: { images: ShopifyImage[] }) {
   );
 }
 
-// --- SUB-COMPONENT: ANIMATED MODAL ---
+// ... (ProductModal component remains exactly the same)
 function ProductModal({
   isOpen,
   onClose,
@@ -182,18 +187,16 @@ function ProductModal({
     if (isOpen) setIndex(startIndex);
   }, [isOpen, startIndex]);
 
-  // Handle mounting for Portal
   useEffect(() => {
     setMounted(true);
     return () => setMounted(false);
   }, []);
 
-  // GSAP Animation for Modal
   useGSAP(() => {
     if (!modalRef.current || !contentRef.current) return;
 
     if (isOpen) {
-      document.body.style.overflow = 'hidden'; // Lock scroll
+      document.body.style.overflow = 'hidden';
       gsap.to(modalRef.current, {
         opacity: 1,
         duration: 0.3,
@@ -205,7 +208,7 @@ function ProductModal({
         { scale: 1, opacity: 1, y: 0, duration: 0.4, ease: 'back.out(1.2)' }
       );
     } else {
-      document.body.style.overflow = ''; // Unlock scroll
+      document.body.style.overflow = '';
       gsap.to(modalRef.current, { opacity: 0, duration: 0.2 });
       gsap.to(contentRef.current, { scale: 0.95, opacity: 0, duration: 0.2 });
     }
@@ -219,7 +222,6 @@ function ProductModal({
     setIndex((prev) => (prev - 1 + images.length) % images.length);
   }, [images.length]);
 
-  // Handle Keyboard Navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
@@ -241,7 +243,6 @@ function ProductModal({
         isOpen ? 'pointer-events-auto' : ''
       )}
     >
-      {/* Close Button */}
       <button
         onClick={onClose}
         className="absolute top-6 right-6 z-50 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-full transition-colors"
@@ -249,12 +250,10 @@ function ProductModal({
         <X size={32} />
       </button>
 
-      {/* Main Content Area */}
       <div
         ref={contentRef}
         className="relative w-full h-full max-w-7xl max-h-screen p-4 flex flex-col items-center justify-center"
       >
-        {/* Large Image View */}
         <div className="relative w-full h-[85vh] flex items-center justify-center">
           <Image
             src={images[index]?.url as string}
@@ -266,7 +265,6 @@ function ProductModal({
           />
         </div>
 
-        {/* Modal Navigation Controls */}
         <button
           onClick={handlePrev}
           className="absolute left-4 top-1/2 -translate-y-1/2 p-4 text-white hover:bg-white/10 rounded-full transition-colors"
@@ -280,7 +278,6 @@ function ProductModal({
           <ChevronRight size={48} strokeWidth={1} />
         </button>
 
-        {/* Counter */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/50 font-mono text-sm tracking-widest">
           {index + 1} / {images.length}
         </div>

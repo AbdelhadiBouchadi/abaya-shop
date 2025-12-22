@@ -67,8 +67,7 @@ function calculateItemCost(quantity: number, price: string): string {
 
 function updateCartItemReducer(
   item: CartItem,
-  updateType: UpdateType,
-  maxQuantity = 100
+  updateType: UpdateType
 ): CartItem | null {
   if (updateType === 'delete') return null;
 
@@ -105,7 +104,7 @@ function updateCartTotals(
     0
   );
 
-  const currencyCode = lines[0]?.cost.totalAmount.currencyCode ?? 'USD';
+  const currencyCode = lines[0]?.cost.totalAmount.currencyCode ?? 'MAD';
 
   return {
     totalQuantity,

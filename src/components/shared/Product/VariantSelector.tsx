@@ -17,9 +17,6 @@ export function ProductVariantSelector({
 
   if (!options.length) return null;
 
-  // Helper: check if a combination exists and is available
-  // If a param is missing from the URL, we default to the first value for that option
-  // to ensure we aren't comparing against 'null'.
   const checkAvailability = (targetOptions: Record<string, string>) => {
     const matchingVariant = variants.find((variant) =>
       variant.selectedOptions.every((vOption) => {
@@ -49,19 +46,15 @@ export function ProductVariantSelector({
           {option.values.map((value) => {
             const optionNameLowerCase = option.name.toLowerCase();
 
-            // 1. Build the target state for this button
             const targetParams = new URLSearchParams(searchParams.toString());
             targetParams.set(optionNameLowerCase, value);
 
-            // 2. Build a complete map of options to check availability
-            // If an option is missing from URL, fill it with the FIRST value from options
             const checkMap: Record<string, string> = {};
             options.forEach((opt) => {
               const key = opt.name.toLowerCase();
               if (key === optionNameLowerCase) {
-                checkMap[key] = value; // The button we are rendering
+                checkMap[key] = value;
               } else {
-                // Use URL param OR fallback to first value
                 checkMap[key] = targetParams.get(key) || opt.values[0];
               }
             });
@@ -74,8 +67,7 @@ export function ProductVariantSelector({
             const clickUrl = createUrl(pathname, targetParams);
 
             // 5. Get Dynamic Color (if applicable)
-            // We try to find a variant that specifically matches THIS button's value for the color option
-            // to grab its specific hex code (even if other options don't match yet)
+
             const colorVariant = variants.find((v) =>
               v.selectedOptions.some(
                 (o) =>

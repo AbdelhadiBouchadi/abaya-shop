@@ -37,8 +37,6 @@ export function ProductDetails({ product }: { product: Product }) {
   const availableQuantity = selectedVariant?.quantityAvailable ?? 0;
   const isLowStock = inStock && availableQuantity > 0 && availableQuantity < 5;
 
-  console.log(availableQuantity);
-
   const colorKey = Object.keys(selectedOptions).find((k) =>
     ['color', 'couleur'].includes(k)
   );

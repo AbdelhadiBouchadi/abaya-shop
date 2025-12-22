@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { FaTimes, FaTrash, FaMinus, FaPlus } from 'react-icons/fa';
+import { FaTimes, FaMinus, FaPlus } from 'react-icons/fa';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { useCart } from '@/context/CartContext';

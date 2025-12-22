@@ -1,7 +1,7 @@
 'use client';
 
 import { Product } from '@/lib/shopify/types';
-import { cn, checkInStock } from '@/lib/utils'; // Use the helper we made
+import { cn, checkInStock } from '@/lib/utils';
 
 interface ProductOptionsProps {
   product: Product;
@@ -16,7 +16,15 @@ export function ProductOptions({
   selectedOptions,
   setSelectedOptions,
 }: ProductOptionsProps) {
-  if (!product.options.length) return null;
+  // 1. CHECK FOR DEFAULT VARIANT
+  // If there is only 1 option, and its name is "Title" (or value "Default Title"),
+  // it means the product is a "Simple Product" without variants. We should hide this UI.
+  const isDefaultVariant =
+    product.options.length === 1 &&
+    (product.options[0].name === 'Title' ||
+      product.options[0].values[0] === 'Default Title');
+
+  if (!product.options.length || isDefaultVariant) return null;
 
   return (
     <div className="space-y-6">
@@ -67,7 +75,6 @@ export function ProductOptions({
                       isActive
                         ? 'bg-[#3E2723] text-white border-[#3E2723] ring-1 ring-[#3E2723]'
                         : 'bg-white text-[#5D4037] border-[#b88d6a]/30 hover:border-[#3E2723]',
-                      // Diagonal line for OOS
                       !isAvailable &&
                         'text-opacity-50 decoration-neutral-500 after:absolute after:w-full after:h-px after:bg-[#5D4037]/40 after:-rotate-12 after:content-[""] select-none cursor-not-allowed opacity-50'
                     )}

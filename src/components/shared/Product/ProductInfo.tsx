@@ -6,7 +6,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion'; // You need shadcn accordion or raw HTML
+} from '@/components/ui/accordion';
 import { Truck, ShieldCheck } from 'lucide-react';
 import { AddToCart } from '../Cart/AddToCart';
 import { ProductVariantSelector } from './VariantSelector';
@@ -27,7 +27,7 @@ export function ProductInfo({ product }: { product: Product }) {
             }).format(parseFloat(product.priceRange.maxVariantPrice.amount))}
           </p>
           {/* Example Badge */}
-          {parseFloat(product.priceRange.maxVariantPrice.amount) > 150 && (
+          {parseFloat(product.priceRange.maxVariantPrice.amount) > 199 && (
             <span className="bg-[#f0eae5] text-[#3E2723] px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
               Premium
             </span>
@@ -35,7 +35,6 @@ export function ProductInfo({ product }: { product: Product }) {
         </div>
       </div>
 
-      {/* Variant Selector (Handles URL state) */}
       <ProductVariantSelector
         options={product.options}
         variants={product.variants}
@@ -52,7 +51,6 @@ export function ProductInfo({ product }: { product: Product }) {
       {/* Add To Cart */}
       <div className="pt-4">
         <AddToCart product={product} />
-        {/* Pass variants/available state to AddToCart to disable if OOS */}
       </div>
 
       {/* Value Props */}

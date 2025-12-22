@@ -30,6 +30,7 @@ export const productFragment = /* GraphQl */ `
           id
           title
           availableForSale
+          quantityAvailable
           selectedOptions {
             name
             value
@@ -37,6 +38,9 @@ export const productFragment = /* GraphQl */ `
           price {
             amount
             currencyCode
+          }
+          metafield(namespace: "custom", key: "color_hex") {
+            value
           }
         }
       }

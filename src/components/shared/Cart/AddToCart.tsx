@@ -2,27 +2,29 @@
 
 import { useActionState, useEffect } from 'react';
 import { addItem } from './actions';
-import { Product, ProductVariant } from '@/lib/shopify/types';
-import { useSearchParams } from 'next/navigation';
+import { Product } from '@/lib/shopify/types';
 import { useCart } from '@/context/CartContext';
 import clsx from 'clsx';
 import { Plus } from 'lucide-react';
 
-export function AddToCart({ product }: { product: Product }) {
-  const searchParams = useSearchParams();
+// 1. Update Props Interface
+export function AddToCart({
+  product,
+  selectedVariantId,
+}: {
+  product: Product;
+  selectedVariantId?: string; // Optional because initially no variant might be selected
+}) {
   const { openCart } = useCart();
   const [state, formAction, isPending] = useActionState(addItem, null);
 
-  const defaultVariantId =
-    product.variants.length === 1 ? product.variants[0]?.id : undefined;
-  const variant = product.variants.find((variant: ProductVariant) =>
-    variant.selectedOptions.every(
-      (option: { name: string; value: string }) =>
-        option.value === searchParams.get(option.name.toLowerCase())
-    )
-  );
-  const selectedVariantId = variant?.id || defaultVariantId;
-  const isAvailable = variant ? variant.availableForSale : true;
+  const finalVariantId =
+    selectedVariantId ||
+    (product.variants.length === 1 ? product.variants[0]?.id : undefined);
+
+  // 3. Check Availability
+  const variant = product.variants.find((v) => v.id === finalVariantId);
+  const isAvailable = variant ? variant.availableForSale : false;
 
   useEffect(() => {
     if (state === 'success') {
@@ -30,11 +32,13 @@ export function AddToCart({ product }: { product: Product }) {
     }
   }, [state, openCart]);
 
-  if (!selectedVariantId && product.variants.length > 1) {
+  // 4. "Select Option" State
+  // If we have multiple variants but no ID is selected yet:
+  if (!finalVariantId && product.variants.length > 1) {
     return (
       <button
         disabled
-        className="w-full rounded-full bg-[#f4f1ed] px-6 py-4 text-[#5D4037]/50 cursor-not-allowed font-medium uppercase tracking-wide opacity-70"
+        className="w-full rounded-2xl bg-[#5D4037]/10 px-6 py-4 text-[#5D4037]/50 cursor-not-allowed font-medium uppercase tracking-wide opacity-70"
       >
         Sélectionnez une option
       </button>
@@ -43,7 +47,7 @@ export function AddToCart({ product }: { product: Product }) {
 
   return (
     <form action={formAction}>
-      <input type="hidden" name="selectedVariantId" value={selectedVariantId} />
+      <input type="hidden" name="selectedVariantId" value={finalVariantId} />
       <button
         type="submit"
         disabled={isPending || !isAvailable}

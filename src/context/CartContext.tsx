@@ -20,7 +20,11 @@ type UpdateType = 'plus' | 'minus' | 'delete';
 
 type CartContextType = {
   cart: Cart | undefined;
-  updateCartItem: (merchandiseId: string, updateType: UpdateType) => void;
+  updateCartItem: (
+    merchandiseId: string,
+    updateType: UpdateType,
+    maxQuantity?: number
+  ) => void;
   addCartItem: (variant: ProductVariant, product: Product) => void;
   isOpen: boolean;
   openCart: () => void;
@@ -30,7 +34,11 @@ type CartContextType = {
 type CartAction =
   | {
       type: 'UPDATE_ITEM';
-      payload: { merchandiseId: string; updateType: UpdateType };
+      payload: {
+        merchandiseId: string;
+        updateType: UpdateType;
+        maxQuantity?: number;
+      };
     }
   | {
       type: 'ADD_ITEM';
@@ -46,9 +54,9 @@ function createEmptyCart(): Cart {
     totalQuantity: 0,
     lines: [],
     cost: {
-      subtotalAmount: { amount: '0', currencyCode: 'USD' },
-      totalAmount: { amount: '0', currencyCode: 'USD' },
-      totalTaxAmount: { amount: '0', currencyCode: 'USD' },
+      subtotalAmount: { amount: '0', currencyCode: 'MAD' },
+      totalAmount: { amount: '0', currencyCode: 'MAD' },
+      totalTaxAmount: { amount: '0', currencyCode: 'MAD' },
     },
   };
 }
@@ -59,7 +67,8 @@ function calculateItemCost(quantity: number, price: string): string {
 
 function updateCartItemReducer(
   item: CartItem,
-  updateType: UpdateType
+  updateType: UpdateType,
+  maxQuantity = 100
 ): CartItem | null {
   if (updateType === 'delete') return null;
 

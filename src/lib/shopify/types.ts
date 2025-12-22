@@ -38,11 +38,13 @@ export type ProductVariant = {
   id: string;
   title: string;
   availableForSale: boolean;
+  quantityAvailable?: number;
   selectedOptions: {
     name: string;
     value: string;
   }[];
   price: Money;
+  metafield?: { value: string };
 };
 
 export type Image = {
@@ -156,6 +158,7 @@ export type CartItem = {
   merchandise: {
     id: string;
     title: string;
+    quantityAvailable?: number;
     selectedOptions: {
       name: string;
       value: string;

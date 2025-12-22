@@ -1,12 +1,14 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { FaTimes, FaTrash } from 'react-icons/fa';
+import { FaTimes, FaTrash, FaMinus, FaPlus } from 'react-icons/fa';
 import Image from 'next/image';
 import gsap from 'gsap';
 import { useCart } from '@/context/CartContext';
-import { createPortal } from 'react-dom';
-import { Link } from 'next-view-transitions';
+import { createPortal, useFormStatus } from 'react-dom';
+import { redirectToCheckout } from './Cart/actions';
+import { DEFAULT_OPTION } from '@/lib/constants';
+import Link from 'next/link';
 
 export default function CartDrawer({
   isOpen,
@@ -79,14 +81,11 @@ export default function CartDrawer({
 
       <div
         ref={drawerRef}
-        className="fixed top-0 right-0 h-screen w-96 max-w-[90vw] bg-background/90 shadow-2xl z-999 
-          flex flex-col opacity-0 translate-x-full"
+        className="fixed top-0 right-0 h-screen w-96 max-w-[90vw] bg-[#fffdfa] shadow-2xl z-999 flex flex-col opacity-0 translate-x-full"
         style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
       >
-        {/* ... KEEP ALL YOUR INNER CONTENT EXACTLY THE SAME ... */}
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-[#b88d6a]/30">
-          {/* ... code ... */}
           <h2 className="text-xl font-bold font-title tracking-tight text-[#9d5035]">
             Votre Panier
           </h2>
@@ -99,68 +98,116 @@ export default function CartDrawer({
         </div>
 
         {/* Items */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 font-text">
-          {/* ... Copy your existing Items loop logic here ... */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-6 font-text">
           {!cart || cart.lines.length === 0 ? (
-            <p className="text-gray-500 text-sm">Votre Panier Est Vide.</p>
+            <div className="h-full flex flex-col items-center justify-center text-center space-y-4 text-[#5D4037]/60">
+              <p className="text-lg font-medium">Votre Panier Est Vide.</p>
+              <button
+                onClick={onClose}
+                className="text-[#9d5035] underline hover:text-[#8a462f] cursor-pointer"
+              >
+                Continuer vos achats
+              </button>
+            </div>
           ) : (
             cart.lines.map((item) => {
-              /* ... existing map code ... */
               const unitPrice =
                 Number.parseFloat(item.cost.totalAmount.amount) / item.quantity;
+
+              // --- STOCK LOGIC ---
+              const maxStock = item.merchandise.quantityAvailable ?? 100;
+              const isMaxedOut = item.quantity >= maxStock;
+
               return (
                 <div
-                  key={item.merchandise.id}
-                  className="cart-item flex gap-3 items-center border-b border-[#b88d6a]/30 pb-3"
+                  key={item.id}
+                  className="cart-item flex gap-4 items-start border-b border-[#b88d6a]/20 pb-6 last:border-0"
                 >
-                  {/* ... Image, Title, Quantity buttons ... */}
-                  <div className="relative w-16 h-16 shrink-0 rounded-md overflow-hidden border border-[#b88d6a]/30">
+                  {/* Image */}
+                  <div className="relative w-20 aspect-3/4 shrink-0 rounded-lg overflow-hidden border border-[#b88d6a]/20 bg-[#f4f1ed]">
                     <Image
                       src={
-                        item.merchandise.product.featuredImage.url ||
+                        item.merchandise.product.featuredImage?.url ||
                         '/placeholder.svg'
                       }
                       alt={item.merchandise.product.title}
                       fill
-                      className="object-contain"
+                      className="object-cover"
                     />
                   </div>
-                  <div className="flex flex-col grow">
-                    <span className="text-sm font-medium line-clamp-2 text-[#9d5035]">
-                      {item.merchandise.product.title}
-                    </span>
 
-                    <div className="flex items-center gap-2 mt-1">
-                      <button
-                        onClick={() =>
-                          updateCartItem(item.merchandise.id, 'minus')
-                        }
-                        className="px-2 py-1 text-sm bg-red-200 rounded hover:bg-red-300 cursor-pointer"
+                  {/* Info */}
+                  <div className="flex flex-col grow justify-between min-h-20">
+                    <div className="space-y-1">
+                      <Link
+                        href={`/product/${item.merchandise.product.handle}`}
+                        onClick={onClose}
                       >
-                        -
-                      </button>
-                      <button
-                        onClick={() =>
-                          updateCartItem(item.merchandise.id, 'plus')
-                        }
-                        className="px-2 py-1 text-sm bg-[#d1fa9d] rounded hover:bg-[#c0e98c] cursor-pointer"
-                      >
-                        +
-                      </button>
-                      <span className="text-xs text-gray-600">
-                        {item.quantity} × {item.cost.totalAmount.currencyCode}{' '}
-                        {unitPrice.toFixed(2)}
-                      </span>
+                        <h3 className="text-sm font-bold text-[#3E2723] hover:text-[#9d5035] leading-tight">
+                          {item.merchandise.product.title}
+                        </h3>
+                      </Link>
+
+                      {/* VARIANT OPTIONS (Color / Size) */}
+                      {item.merchandise.title !== DEFAULT_OPTION && (
+                        <p className="text-xs text-[#5D4037]/70">
+                          {item.merchandise.selectedOptions
+                            .map((option) => option.value)
+                            .join(' / ')}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex items-end justify-between mt-3">
+                      {/* Quantity Controls */}
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center rounded-xl border border-[#b88d6a]/30 bg-white shadow-sm h-8 px-1">
+                          <button
+                            onClick={() =>
+                              updateCartItem(item.merchandise.id, 'minus')
+                            }
+                            className="p-2 text-[#5D4037] hover:text-[#3E2723] disabled:opacity-30 transition-colors"
+                            disabled={item.quantity <= 1}
+                          >
+                            <FaMinus size={10} />
+                          </button>
+                          <span className="w-6 text-center text-xs font-bold text-[#3E2723]">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={() =>
+                              updateCartItem(item.merchandise.id, 'plus')
+                            }
+                            className="p-2 text-[#5D4037] hover:text-[#3E2723] disabled:opacity-30 transition-colors"
+                            disabled={isMaxedOut}
+                            title={isMaxedOut ? 'Stock limit reached' : ''}
+                          >
+                            <FaPlus size={10} />
+                          </button>
+                        </div>
+                        {isMaxedOut && (
+                          <span className="text-[10px] text-red-500 font-medium">
+                            Max
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Price & Delete */}
+                      <div className="flex flex-col items-end gap-1">
+                        <span className="text-sm font-bold text-[#3E2723]">
+                          {currencyCode} {unitPrice.toFixed(2)}
+                        </span>
+                        <button
+                          onClick={() =>
+                            updateCartItem(item.merchandise.id, 'delete')
+                          }
+                          className="text-xs text-red-400 hover:text-red-600 underline decoration-red-200 transition-colors"
+                        >
+                          Supprimer
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  <button
-                    onClick={() =>
-                      updateCartItem(item.merchandise.id, 'delete')
-                    }
-                    className="text-red-500 hover:text-red-700 transition cursor-pointer"
-                  >
-                    <FaTrash />
-                  </button>
                 </div>
               );
             })
@@ -169,25 +216,44 @@ export default function CartDrawer({
 
         {/* Footer */}
         {cart && cart.lines.length > 0 && (
-          <div className="p-4 space-y-3 border-t border-[#b88d6a]/30">
-            <div className="flex justify-between text-sm font-medium text-[#9d5035]">
-              <span>Total:</span>
-              <span>
-                {currencyCode} {totalPrice.toFixed(2)}
-              </span>
+          <div className="p-6 bg-[#fffdfa] border-t border-[#b88d6a]/20 space-y-4">
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm text-[#5D4037]">
+                <span>Sous-total</span>
+                <span className="font-bold text-[#3E2723]">
+                  {currencyCode} {totalPrice.toFixed(2)}
+                </span>
+              </div>
+              <p className="text-xs text-[#5D4037]/60 text-center">
+                Frais de port et taxes calculés lors du paiement.
+              </p>
             </div>
-            <Link href="/checkout" passHref>
-              <button
-                onClick={onClose}
-                className="w-full cursor-pointer bg-[#9d5035] text-white py-2 rounded-xl text-sm font-semibold hover:bg-[#8a462f] transition"
-              >
-                Continuer
-              </button>
-            </Link>
+
+            <form action={redirectToCheckout}>
+              <CheckoutButton />
+            </form>
           </div>
         )}
       </div>
     </>,
     document.body
+  );
+}
+
+function CheckoutButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="w-full relative flex justify-center items-center bg-[#3E2723] text-white py-4 rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-[#5D4037] hover:shadow-lg transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:shadow-none"
+    >
+      {pending ? (
+        <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+      ) : (
+        'Continuer'
+      )}
+    </button>
   );
 }

@@ -65,7 +65,7 @@ export function formatMenuUrl(url: string | undefined): string {
       return parsedObj.pathname.replace('/collections/', '/search/');
     }
     return parsedObj.pathname;
-  } catch (e) {
+  } catch {
     return url;
   }
 }

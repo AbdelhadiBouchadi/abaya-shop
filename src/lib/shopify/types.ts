@@ -239,6 +239,12 @@ export type ShopifyAddToCartOperation = {
   };
 };
 
+export type MetafieldImageReference = {
+  reference?: {
+    image?: Image;
+  };
+};
+
 export type Page = {
   id: string;
   title: string;
@@ -246,6 +252,10 @@ export type Page = {
   body: string;
   bodySummary: string;
   seo?: SEO;
+  heroImage?: MetafieldImageReference;
+  quote?: { value: string };
+  secondDescription?: { value: string };
+  portraitImage?: MetafieldImageReference;
   createdAt: string;
   updatedAt: string;
 };

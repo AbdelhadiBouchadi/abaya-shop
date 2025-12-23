@@ -164,7 +164,7 @@ export default async function Footer() {
         <div className="shrink-0">
           <Link href="/">
             <Image
-              src="/logo.png"
+              src="/Logo.png"
               alt="Waliliya Logo"
               width={120}
               height={120}

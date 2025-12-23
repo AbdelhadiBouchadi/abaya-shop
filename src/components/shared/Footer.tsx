@@ -164,10 +164,10 @@ export default async function Footer() {
         <div className="shrink-0">
           <Link href="/">
             <Image
-              src="/logo.jpg"
+              src="/logo.png"
               alt="Waliliya Logo"
-              width={70}
-              height={70}
+              width={120}
+              height={120}
               className="rounded-xl object-contain"
             />
           </Link>

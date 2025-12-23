@@ -51,7 +51,7 @@ export default function HeroSection() {
     >
       {/* --- Background Image --- */}
       <FadeIn
-        vars={{ scale: 1, opacity: 0.7 }}
+        vars={{ scale: 1, opacity: 0.9 }}
         className="absolute inset-0 opacity-0 motion-safe:scale-125"
       >
         <Image
@@ -63,8 +63,8 @@ export default function HeroSection() {
           className="object-fill motion-reduce:opacity-50"
         />
         {/* Soft Overlay to ensure text readability (Beige/Warm tint) */}
-        <div className="absolute inset-0 bg-[#3E2723]/10 mix-blend-multiply" />
-        <div className="absolute inset-0 bg-linear-to-t from-[#F5F5F0]/20 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-[#3E2723]/5 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-linear-to-t from-[#F5F5F0]/10 via-transparent to-transparent" />
       </FadeIn>
 
       {/* --- Content --- */}
@@ -72,7 +72,7 @@ export default function HeroSection() {
         <div className="max-w-3xl">
           {/* Small Tagline - Pistachio Accent */}
           <FadeIn vars={{ delay: 0.2 }}>
-            <span className="font-subtitle text-sm md:text-base font-semibold tracking-widest uppercase text-[#9d5035] mb-4 block">
+            <span className="font-subtitle text-sm md:text-base font-semibold tracking-widest uppercase text-[#9d5035] mb-4 block pl-1">
               Nouvelles Collections
             </span>
           </FadeIn>
@@ -93,7 +93,7 @@ export default function HeroSection() {
 
           {/* Subtext - Brown/Gray */}
           <FadeIn
-            className="mt-6 max-w-lg text-lg md:text-xl text-[#9d5035]/60 font-text leading-relaxed"
+            className="mt-6 max-w-lg text-lg md:text-xl text-[#9d5035]/95 font-text leading-relaxed pl-1"
             vars={{ delay: 0.8 }}
           >
             <p>

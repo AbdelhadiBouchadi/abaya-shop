@@ -13,7 +13,7 @@ import { ViewTransitions } from 'next-view-transitions';
 export const metadata: Metadata = {
   title: {
     template: '%s | Waliliya',
-    default: 'Waliliya | Mode Modeste & Élégance',
+    default: 'Waliliya | Modest Clothes & Wellness',
   },
   description:
     'Découvrez notre collection exclusive de Burkinis, Abayas et tenues modest fashion. Alliant qualité premium, confort et design moderne pour la femme élégante.',

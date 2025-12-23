@@ -33,27 +33,25 @@ export default function Header({ menu }: { menu: Menu[] }) {
         >
           <div className="flex items-center justify-between gap-6 py-3 lg:py-4">
             {/* Mobile Menu Trigger - Left */}
-            <div className="lg:hidden">
+            <div className="xl:hidden">
               <MobileMenu menu={menu} />
             </div>
 
             {/* Logo - Center on mobile, Left on desktop */}
-            <div className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 z-10 ">
+            <div className="absolute left-1/2 -translate-x-1/2 xl:static xl:translate-x-0 z-10 ">
               <Link href="/">
                 <Image
-                  src="/logo.jpg"
+                  src="/logo.png"
                   alt="Waliliya logo"
-                  width={60}
-                  height={60}
+                  width={100}
+                  height={100}
                   priority
-                  className="rounded-2xl transition-all duration-300 
-          ease-[cubic-bezier(0.68,-0.55,0.27,1.55)] 
-          hover:scale-110 hover:shadow-lg"
+                  className=""
                 />
               </Link>
             </div>
 
-            <div className="absolute inset-x-0 top-0 h-full hidden lg:flex justify-center items-center pointer-events-none">
+            <div className="absolute inset-x-0 top-0 h-full hidden xl:flex justify-center items-center pointer-events-none">
               <div className="pointer-events-auto h-full flex items-center">
                 <DesktopNav menu={menu} />
               </div>

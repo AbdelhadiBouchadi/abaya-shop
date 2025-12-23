@@ -10,7 +10,7 @@ export default function DesktopNav({ menu }: { menu: Menu[] }) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   return (
-    <nav className="hidden lg:flex items-center gap-8 text-sm h-full">
+    <nav className="hidden xl:flex items-center gap-8 text-sm h-full">
       {menu.map((item: Menu) => {
         // Safe check for items
         const hasSubMenu = item.items && item.items.length > 0;
@@ -25,7 +25,7 @@ export default function DesktopNav({ menu }: { menu: Menu[] }) {
           >
             <Link
               href={item.url}
-              className="flex items-center gap-1 text-[#b88d6a] hover:text-[#9d5035] transition-colors font-medium uppercase tracking-wide py-4 relative z-10"
+              className="flex items-center gap-1 text-[#b88d6a] hover:text-[#9d5035] transition-colors font-medium uppercase tracking-wide py-4 relative z-10 font-text"
             >
               {item.title}
               {hasSubMenu && (
@@ -49,14 +49,8 @@ export default function DesktopNav({ menu }: { menu: Menu[] }) {
                 )}
               >
                 {/* Dropdown Content Styling */}
-                <div className="bg-background/95 backdrop-blur-xl border border-[#b88d6a]/20 w-full py-8 rounded-2xl shadow-xl">
-                  {/* Added 'flex justify-center' here to center the grid block.
-                      Added 'font-title' for correct font application.
-                  */}
-                  <div className="mx-auto max-w-7xl px-8 flex justify-center font-title">
-                    {/* Added 'text-center' to center the links within their grid cells.
-                        Increased gap for better centering aesthetics.
-                    */}
+                <div className="bg-background/90 backdrop-blur-xl border border-[#b88d6a]/20 w-full py-8 rounded-2xl shadow-xl">
+                  <div className="mx-auto max-w-7xl px-8 flex justify-center font-text">
                     <div className="grid grid-cols-4 gap-12 text-center">
                       {(item.items || []).map((subItem) => (
                         <div key={subItem.title} className="space-y-3">

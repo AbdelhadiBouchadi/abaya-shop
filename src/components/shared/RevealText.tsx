@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
-import { useRef, type ElementType } from 'react'; // <--- 1. Import ElementType
+import { useRef, type ElementType } from 'react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -11,7 +11,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 interface RevealTextProps {
   text: string;
   className?: string;
-  tagName?: ElementType; // <--- 2. Use ElementType instead of JSX.IntrinsicElements
+  tagName?: ElementType;
   delay?: number;
 }
 
@@ -21,7 +21,6 @@ export const RevealText = ({
   tagName: Tag = 'h1',
   delay = 0,
 }: RevealTextProps) => {
-  // <--- 3. Use HTMLElement to be safe for any tag (h1, div, p)
   const textRef = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -57,7 +56,7 @@ export const RevealText = ({
   return (
     <Tag
       ref={textRef}
-      className={cn('overflow-hidden leading-tight', className)}
+      className={cn('overflow-hidden pb-2 leading-snug', className)}
       aria-label={text}
     >
       <span className="sr-only">{text}</span>

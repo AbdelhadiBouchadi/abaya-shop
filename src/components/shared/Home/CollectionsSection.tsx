@@ -2,183 +2,228 @@
 
 import { useRef } from 'react';
 import Image from 'next/image';
-import { cn } from '@/lib/utils';
 import { Collection } from '@/lib/shopify/types';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Link } from 'next-view-transitions';
 import { FadeIn } from '../FadeIn';
 import { Bounded } from '../Bounded';
 import { RevealText } from '../RevealText';
-import { Link } from 'next-view-transitions';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-// --- Sub-Component: The Individual Collection Card ---
-const CollectionCard = ({
+// --- 1. PORTRAIT CARD (For the top 3 items) ---
+const PortraitCard = ({
   collection,
-  index,
+  priority = false,
 }: {
   collection: Collection;
-  index: number;
+  priority?: boolean;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
-  const isEven = index % 2 === 0;
 
   useGSAP(
     () => {
-      const mm = gsap.matchMedia();
-
-      // 1. Standard Motion: Parallax Effect
-      // Runs only if the user has NOT requested reduced motion
-      mm.add('(prefers-reduced-motion: no-preference)', () => {
-        if (imageRef.current) {
-          gsap.fromTo(
-            imageRef.current,
-            { y: '-10%' },
-            {
-              y: '10%',
-              ease: 'none',
-              scrollTrigger: {
-                trigger: containerRef.current,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: true,
-              },
-            }
-          );
-        }
-      });
-
-      // Runs if the user HAS requested reduced motion (accessibility)
-      mm.add('(prefers-reduced-motion: reduce)', () => {
-        if (imageRef.current) {
-          gsap.fromTo(
-            imageRef.current,
-            { opacity: 0, scale: 1.05 },
-            {
-              opacity: 1,
-              scale: 1,
-              duration: 1.5,
-              ease: 'power2.out',
-              scrollTrigger: {
-                trigger: containerRef.current,
-                start: 'top 85%',
-                toggleActions: 'play none none reverse',
-              },
-            }
-          );
-        }
-      });
+      if (imageRef.current) {
+        gsap.fromTo(
+          imageRef.current,
+          { y: '-10%', scale: 1.1 }, // Start slightly zoomed and pulled up
+          {
+            y: '10%',
+            ease: 'none',
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true,
+            },
+          }
+        );
+      }
     },
     { scope: containerRef }
   );
 
   return (
-    <div
-      ref={containerRef}
-      className={cn(
-        'group relative flex w-full flex-col gap-8 md:flex-row md:items-center md:gap-16 lg:gap-24',
-        !isEven && 'md:flex-row-reverse' // Alternating Layout
-      )}
-    >
-      {/* Image Side */}
-      <div className="relative aspect-4/5 w-full overflow-hidden rounded-2xl md:w-1/2 lg:aspect-3/4">
+    <Link href={collection.path} className="group block w-full">
+      <div
+        ref={containerRef}
+        className="relative aspect-3/4 w-full overflow-hidden rounded-xl"
+      >
         {collection.image ? (
           <Image
             ref={imageRef}
             src={collection.image.url}
             alt={collection.image.altText || collection.title}
             fill
-            className="h-[120%] w-full object-cover transition-opacity duration-500 group-hover:opacity-90"
-            sizes="(max-width: 768px) 100vw, 50vw"
+            priority={priority}
+            className="h-[120%] w-full object-cover transition-opacity duration-500"
+            sizes="(max-width: 768px) 100vw, 33vw"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center bg-[#DCDBDB]">
-            <span className="text-gray-400">No Image</span>
+          <div className="flex h-full w-full items-center justify-center text-[#5D4037]/40">
+            No Image
           </div>
         )}
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-        {/* Pistachio Overlay on Hover */}
-        <div className="absolute inset-0 bg-[#7D915B]/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100 mix-blend-multiply" />
-      </div>
-
-      {/* Text Side */}
-      <div className="flex w-full flex-col items-center text-center md:w-1/2 md:items-start md:text-left">
-        <FadeIn vars={{ y: 20 }}>
-          <h3 className="font-title text-4xl text-[#3E2723] md:text-5xl lg:text-6xl">
+        {/* Floating Text (Bottom Left) */}
+        <div className="absolute bottom-4 left-4 z-10 text-white">
+          <p className="font-subtitle text-xs font-bold uppercase tracking-widest drop-shadow-md">
+            Collection
+          </p>
+          <h3 className="font-title text-xl drop-shadow-md md:text-2xl">
             {collection.title}
           </h3>
-        </FadeIn>
-
-        <FadeIn vars={{ delay: 0.2 }}>
-          <div
-            dangerouslySetInnerHTML={{
-              __html:
-                collection.description ||
-                'Découvrez notre sélection exclusive.',
-            }}
-            className="mt-6 max-w-md font-text text-lg leading-relaxed text-[#5D4037]/80 prose"
-          />
-        </FadeIn>
-
-        <FadeIn vars={{ delay: 0.4 }} className="mt-8">
-          <Link href={collection.path}>
-            <button className="relative overflow-hidden rounded-2xl cursor-pointer border border-[#3E2723] px-8 py-3 text-[#3E2723] transition-all duration-300 hover:border-[#7D915B] hover:text-[#7D915B]">
-              <span className="font-subtitle text-sm font-bold uppercase tracking-widest">
-                Explorer la collection
-              </span>
-            </button>
-          </Link>
-        </FadeIn>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
-// --- Main Component ---
+// --- 2. LANDSCAPE CARD (For the bottom item) ---
+const LandscapeCard = ({ collection }: { collection: Collection }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+
+  useGSAP(
+    () => {
+      if (imageRef.current) {
+        gsap.fromTo(
+          imageRef.current,
+          { y: '-15%' },
+          {
+            y: '0%', // Less movement for landscape to avoid showing edges
+            ease: 'none',
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true,
+            },
+          }
+        );
+      }
+    },
+    { scope: containerRef }
+  );
+
+  return (
+    <Link
+      href={collection.path}
+      className="group block w-full col-span-1 lg:col-span-3"
+    >
+      <div
+        ref={containerRef}
+        className="relative aspect-video lg:aspect-21/9 w-full overflow-hidden rounded-xl bg-[#f4f1ed]"
+      >
+        {collection.image ? (
+          <Image
+            ref={imageRef}
+            src={collection.image.url}
+            alt={collection.image.altText || collection.title}
+            fill
+            className="h-[120%] w-full object-cover"
+            sizes="100vw"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-[#5D4037]/40">
+            No Image
+          </div>
+        )}
+
+        {/* Center Content Overlay */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/20 transition-colors duration-300 group-hover:bg-black/30">
+          <FadeIn vars={{ y: 20 }}>
+            <h3 className="font-title text-4xl text-white md:text-6xl lg:text-7xl drop-shadow-lg text-center">
+              {collection.title}
+            </h3>
+          </FadeIn>
+        </div>
+      </div>
+    </Link>
+  );
+};
+
+// --- MAIN COMPONENT ---
 export default function CollectionsProducts({
   collections,
 }: {
   collections: Collection[];
 }) {
+  // 1. DEFINE YOUR MASTER ORDER HERE
+  // The exact handles from Shopify in the order you want them displayed.
+  const masterOrder = [
+    'abayas', // 1st (Top Left)
+    'abayas-luxe-dubai', // 2nd (Top Middle)
+    'abaya-essentielle', // 3rd (Top Right)
+    'summer', // 4th (Bottom Landscape)
+    'bien-etre', // 5th (Not shown in 3+1 grid, or added later)
+  ];
+
+  // 2. SORT THE COLLECTIONS
+  const sortedCollections = [...collections].sort((a, b) => {
+    const indexA = masterOrder.indexOf(a.handle);
+    const indexB = masterOrder.indexOf(b.handle);
+
+    // If neither in list, keep original order
+    if (indexA === -1 && indexB === -1) return 0;
+    // If A not in list, move to end
+    if (indexA === -1) return 1;
+    // If B not in list, move to end
+    if (indexB === -1) return -1;
+
+    return indexA - indexB;
+  });
+
+  // 3. SLICE FOR LAYOUT
+  // Top 3 Vertical Cards
+  const displayTop = sortedCollections.slice(0, 3);
+
+  // The 4th item becomes the Landscape Card
+  const bottomCollection = sortedCollections[3];
+
   return (
-    <Bounded className=" py-20 md:py-32">
-      <div className="relative mx-auto space-y-16 md:space-y-24">
-        {/* Section Header */}
-        <div className="space-y-6 text-center">
+    <Bounded className="py-20 md:py-32 max-w-none ">
+      <div className="relative mx-auto space-y-12">
+        {/* Header */}
+        <div className="text-center space-y-4 mb-16">
           <FadeIn>
             <p className="font-subtitle text-xs font-bold tracking-[0.2em] uppercase text-[#7D915B]">
               Nos Collections
             </p>
           </FadeIn>
-
           <div className="flex justify-center">
             <RevealText
-              text="Collections Signatures"
-              tagName="h2"
-              className="font-title text-3xl text-[#3E2723] md:text-6xl lg:text-7xl"
+              text="Univers Waliliya"
+              className="font-title text-4xl text-[#3E2723] md:text-6xl"
             />
           </div>
-
-          <FadeIn className="mx-auto max-w-2xl">
-            <p className="font-text text-lg text-[#5D4037]/70">
-              Des pièces uniques pensées pour sublimer votre quotidien avec
-              pudeur et raffinement.
-            </p>
-          </FadeIn>
         </div>
 
-        {/* Collections Grid (Stacked) */}
-        <div className="flex flex-col gap-24 md:gap-40">
-          {collections.map((collection, index) => (
-            <CollectionCard
-              key={collection.handle}
-              collection={collection}
-              index={index}
-            />
+        {/* --- THE GRID --- */}
+        <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
+          {/* Row 1: The Three Vertical Cards */}
+          {displayTop.map((col, i) => (
+            <div key={col.handle} className="col-span-1">
+              <FadeIn vars={{ y: 30, delay: i * 0.1 }}>
+                <PortraitCard collection={col} />
+              </FadeIn>
+            </div>
           ))}
+
+          {/* Row 2: The Big Landscape Card */}
+          {bottomCollection && (
+            <FadeIn
+              vars={{ y: 30, delay: 0.3 }}
+              className="col-span-1 md:col-span-2 lg:col-span-3 mt-2"
+            >
+              <LandscapeCard collection={bottomCollection} />
+            </FadeIn>
+          )}
         </div>
       </div>
     </Bounded>

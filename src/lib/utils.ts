@@ -48,3 +48,24 @@ export function formatCurrency(amount: string, currencyCode: string) {
     currency: currencyCode,
   }).format(parseFloat(amount));
 }
+
+export function formatMenuUrl(url: string | undefined): string {
+  if (!url) return '/';
+
+  if (url.startsWith('/')) {
+    if (url.startsWith('/collections/')) {
+      return url.replace('/collections/', '/search/');
+    }
+    return url;
+  }
+
+  try {
+    const parsedObj = new URL(url);
+    if (parsedObj.pathname.startsWith('/collections/')) {
+      return parsedObj.pathname.replace('/collections/', '/search/');
+    }
+    return parsedObj.pathname;
+  } catch (e) {
+    return url;
+  }
+}

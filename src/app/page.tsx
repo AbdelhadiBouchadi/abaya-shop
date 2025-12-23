@@ -11,7 +11,7 @@ export default async function Home() {
     <section className="w-full">
       <HeroSection />
       <CollectionsProducts collections={filteredCollections} />
-      <AtmosphereSection videoId="sVxWQkWfmUs" />
+      <AtmosphereSection />
     </section>
   );
 }

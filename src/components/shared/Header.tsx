@@ -41,7 +41,7 @@ export default function Header({ menu }: { menu: Menu[] }) {
             <div className="absolute left-1/2 -translate-x-1/2 xl:static xl:translate-x-0 z-10 ">
               <Link href="/">
                 <Image
-                  src="/logo.png"
+                  src="/Logo.png"
                   alt="Waliliya logo"
                   width={100}
                   height={100}

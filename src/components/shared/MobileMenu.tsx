@@ -200,7 +200,7 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
               <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-[#F5F5F0]/50 shrink-0">
                 <Link href="/" onClick={() => setIsOpen(false)}>
                   <Image
-                    src="/logo.png"
+                    src="/Logo.png"
                     alt="Waliliya logo"
                     width={80}
                     height={80}

@@ -77,6 +77,7 @@ export default async function RootLayout({
       <html
         lang="en"
         className={`${LibreBaskerville.variable} ${OpenSans.variable} ${MerriWeather.variable}`}
+        suppressHydrationWarning={true}
       >
         <SmoothScroll>
           <body className="min-h-screen flex flex-col">

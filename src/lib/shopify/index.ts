@@ -48,6 +48,7 @@ import {
 } from './mutations/cart';
 import { getCartQuery } from './queries/cart';
 import { getPageQuery, getPagesQuery } from './queries/page';
+import { getFAQQuery } from './queries/faq';
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN
   ? ensureStartWith(process.env.SHOPIFY_STORE_DOMAIN, 'https://')
@@ -416,6 +417,65 @@ export async function addToCart(
   });
 
   return reshapeCart(res.body.data.cartLinesAdd.cart);
+}
+
+export type FAQItem = {
+  question: string;
+  answer: string;
+  category: string;
+};
+
+type ShopifyFAQNode = {
+  question?: { value: string };
+  answer?: { value: string };
+  category?: { value: string };
+};
+
+type ShopifyFAQOperation = {
+  data: {
+    metaobjects: {
+      nodes: ShopifyFAQNode[];
+    };
+  };
+};
+
+export async function getFAQ(): Promise<Record<string, FAQItem[]>> {
+  // FIX 1: Use the operation type instead of <any>
+  const res = await shopifyFetch<ShopifyFAQOperation>({
+    query: getFAQQuery,
+    tags: ['faq'],
+  });
+
+  const items = res.body?.data?.metaobjects?.nodes || [];
+
+  // Group by Category
+  const grouped: Record<string, FAQItem[]> = {};
+
+  items.forEach((item: ShopifyFAQNode) => {
+    let cat = item.category?.value || 'Divers';
+
+    if (cat.startsWith('[')) {
+      try {
+        const parsed = JSON.parse(cat);
+        cat = parsed[0];
+      } catch {
+        return;
+      }
+    }
+
+    if (!grouped[cat]) grouped[cat] = [];
+
+    // Ensure values exist before pushing (fallback to empty string if undefined)
+    if (item.question?.value && item.answer?.value) {
+      grouped[cat].push({
+        question: item.question.value,
+        answer: item.answer.value,
+        category: cat,
+      });
+    }
+  });
+
+  return grouped;
 }
 
 export async function getPage(handle: string): Promise<Page> {

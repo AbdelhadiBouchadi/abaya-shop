@@ -184,14 +184,14 @@ export default async function Footer() {
           </p>
           <div className="text-xs text-gray-500 flex justify-center md:justify-end gap-4">
             <Link
-              href="/policies/terms-of-service"
+              href="/conditions-generales-de-vente-et-dutilisation"
               className="hover:text-[#9d5035]"
             >
               Conditions Générales
             </Link>
             <span>|</span>
             <Link
-              href="/policies/privacy-policy"
+              href="/politique-de-confidentialite"
               className="hover:text-[#9d5035]"
             >
               Politique de Confidentialité

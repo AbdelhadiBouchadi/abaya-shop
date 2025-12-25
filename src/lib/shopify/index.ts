@@ -49,6 +49,7 @@ import {
 import { getCartQuery } from './queries/cart';
 import { getPageQuery, getPagesQuery } from './queries/page';
 import { getFAQQuery } from './queries/faq';
+import { customerSubscribeMutation } from './mutations/newsletter';
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN
   ? ensureStartWith(process.env.SHOPIFY_STORE_DOMAIN, 'https://')
@@ -476,6 +477,39 @@ export async function getFAQ(): Promise<Record<string, FAQItem[]>> {
   });
 
   return grouped;
+}
+
+type CustomerSubscribePayload = {
+  customer: {
+    email: string;
+  } | null;
+  customerUserErrors: {
+    field: string[];
+    message: string;
+  }[];
+};
+
+type CustomerSubscribeOperation = {
+  data: {
+    customerEmailMarketingSubscribe: CustomerSubscribePayload;
+  };
+  variables: {
+    email: string;
+  };
+};
+
+export async function subscribeToNewsletter(email: string) {
+  const res = await shopifyFetch<CustomerSubscribeOperation>({
+    query: customerSubscribeMutation,
+    variables: { email },
+    cache: 'no-store',
+    headers: {
+      'X-Shopify-Storefront-Access-Token':
+        process.env.SHOPIFY_PRIVATE_ACCESS_TOKEN!,
+    },
+  });
+
+  return res.body?.data?.customerEmailMarketingSubscribe;
 }
 
 export async function getPage(handle: string): Promise<Page> {

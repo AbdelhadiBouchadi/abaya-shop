@@ -9,6 +9,7 @@ import {
   FaTiktok,
 } from 'react-icons/fa';
 import { MdEmail, MdPhone, MdLocationOn } from 'react-icons/md';
+import NewsletterForm from './NewsletterForm';
 
 const contactInfo = [
   {
@@ -140,21 +141,8 @@ export default async function Footer() {
           <h3 className={headerClass}>
             Recevez promotions exclusives, ventes privées et nouveautés
           </h3>
-          <form className="flex flex-col gap-3 mt-2">
-            <input
-              type="email"
-              placeholder="Votre email"
-              className="w-full px-4 py-3 text-sm rounded-md border border-[#b88d6a]/40 bg-white/50 focus:outline-none focus:border-[#9d5035] focus:ring-1 focus:ring-[#9d5035] placeholder:text-gray-400"
-              required
-            />
-            <button
-              type="submit"
-              className="w-full bg-[#3E2723] text-white font-semibold py-3 px-4 rounded-md hover:bg-[#9d5035] transition-colors duration-300 flex items-center justify-center gap-2 uppercase text-sm tracking-wider"
-            >
-              M&apos;inscrire
-              <FaArrowRight className="text-xs" />
-            </button>
-          </form>
+
+          <NewsletterForm />
         </div>
       </div>
 

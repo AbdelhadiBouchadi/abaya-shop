@@ -10,7 +10,6 @@ export function RelatedProducts({ products }: { products: Product[] }) {
 
   if (!products.length) return null;
 
-  // Logic: Show only 3 items initially, unless expanded
   const visibleProducts = isExpanded ? products : products.slice(0, 3);
   const hasMore = products.length > 3;
 

@@ -153,7 +153,6 @@ export default function CollectionsProducts({
 }: {
   collections: Collection[];
 }) {
-  // 1. DEFINE YOUR MASTER ORDER HERE
   const masterOrder = [
     'abayas', // 1 (Top Left)
     'abayas-luxe-dubai', // 2 (Top Middle)
@@ -207,7 +206,6 @@ export default function CollectionsProducts({
             </div>
           ))}
 
-          {/* ROW 2: Wrapper that spans all 3 cols, then splits into 2 Landscape Cards */}
           <div className="col-span-1 md:col-span-3 mt-2">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {bottomRow.map((col, i) => (

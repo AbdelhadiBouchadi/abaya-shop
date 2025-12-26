@@ -2,12 +2,7 @@ import { getMenu } from '@/lib/shopify';
 import { Menu } from '@/lib/shopify/types';
 import { Link } from 'next-view-transitions';
 import Image from 'next/image';
-import {
-  FaFacebook,
-  FaInstagram,
-  FaArrowRight,
-  FaTiktok,
-} from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaTiktok } from 'react-icons/fa';
 import { MdEmail, MdPhone, MdLocationOn } from 'react-icons/md';
 import NewsletterForm from './NewsletterForm';
 
@@ -36,7 +31,11 @@ const contactInfo = [
 
 const socialIcons = [
   { icon: <FaFacebook />, label: 'Facebook', href: '#' },
-  { icon: <FaInstagram />, label: 'Instagram', href: '#' },
+  {
+    icon: <FaInstagram />,
+    label: 'Instagram',
+    href: 'https://www.instagram.com/waliliya_collection/',
+  },
   { icon: <FaTiktok />, label: 'Tiktok', href: '#' },
 ];
 
@@ -46,7 +45,6 @@ export default async function Footer() {
     getMenu('footer'),
   ]);
 
-  // Shared header style to match the reference photo (uppercase, tracking)
   const headerClass =
     'font-title font-semibold text-sm mb-6 text-[#3E2723] uppercase tracking-wider';
 
@@ -54,7 +52,7 @@ export default async function Footer() {
     <footer className="bg-[#9d5035]/30 text-gray-800 font-text border-t border-[#b88d6a]/20">
       {/* Top Section: 4 Columns Grid */}
       <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 items-start">
-        {/* Column 1: Collections (was Categories in photo) */}
+        {/* Column 1: Collections  */}
         <div>
           <h3 className={headerClass}>Collections</h3>
           <ul className="space-y-3 text-sm">
@@ -96,7 +94,6 @@ export default async function Footer() {
           </ul>
         </div>
 
-        {/* Column 3: Contact & Suivez-nous (Combined to fit layout) */}
         <div>
           <h3 className={headerClass}>Contact & Suivez-nous</h3>
           {/* Social Icons */}
@@ -146,7 +143,6 @@ export default async function Footer() {
         </div>
       </div>
 
-      {/* Bottom Section: Logo Left, Copyright Right */}
       <div className="py-8 px-6 border-t border-[#b88d6a]/20 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         {/* Left Side: Logo */}
         <div className="shrink-0">

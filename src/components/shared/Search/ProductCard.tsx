@@ -35,7 +35,7 @@ export function ProductCard({
         {/* Cinematic Overlay - Darkens slightly on hover for focus */}
         <div className="absolute inset-0 bg-black/0 transition-colors duration-500 group-hover:bg-black/5 pointer-events-none" />
 
-        {/* Optional "Quick Add" Circle Button (Appears on Hover) - A common Premium E-commerce feature */}
+        {/* Optional "Quick Add" Circle Button */}
         <div className="absolute bottom-4 right-4 translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
           <div className="bg-[#b88d6a] text-gray-200 rounded-full p-3 shadow-lg hover:bg-[#9d5035] hover:text-gray-200 transition-colors duration-500">
             <svg

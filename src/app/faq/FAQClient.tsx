@@ -16,16 +16,15 @@ type FAQData = Record<
   { question: string; answer: string; category: string }[]
 >;
 
-// --- Helper to create safe IDs (e.g. "Questions générales" -> "questions-generales") ---
 const slugify = (text: string) => {
   return text
     .toString()
     .toLowerCase()
-    .normalize('NFD') // Separate accents
-    .replace(/[\u0300-\u036f]/g, '') // Remove accents
-    .replace(/\s+/g, '-') // Replace spaces with -
-    .replace(/[^\w-]+/g, '') // Remove all non-word chars
-    .replace(/--+/g, '-'); // Replace multiple - with single -
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-');
 };
 
 // --- Single Accordion Item ---
@@ -92,7 +91,6 @@ export default function FAQClient({ data }: { data: FAQData }) {
   useEffect(() => {
     const ctx = gsap.context(() => {
       categories.forEach((cat) => {
-        // USE SLUG HERE
         const selector = `#cat-${slugify(cat)}`;
 
         ScrollTrigger.create({
@@ -110,7 +108,6 @@ export default function FAQClient({ data }: { data: FAQData }) {
   // Handle Click to Scroll
   const scrollToCategory = (cat: string) => {
     setActiveCategory(cat);
-    // USE SLUG HERE
     const selector = `#cat-${slugify(cat)}`;
 
     gsap.to(window, {

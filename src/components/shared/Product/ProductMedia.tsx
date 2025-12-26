@@ -15,7 +15,6 @@ export function ProductMedia({ images }: { images: ShopifyImage[] }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // --- FIX: RESET INDEX WHEN COLOR CHANGES ---
   useEffect(() => {
     setSelectedIndex(0);
   }, [images]);
@@ -165,7 +164,6 @@ export function ProductMedia({ images }: { images: ShopifyImage[] }) {
   );
 }
 
-// ... (ProductModal component remains exactly the same)
 function ProductModal({
   isOpen,
   onClose,

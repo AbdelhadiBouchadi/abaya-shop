@@ -12,13 +12,11 @@ export default function DesktopNav({ menu }: { menu: Menu[] }) {
   return (
     <nav className="hidden xl:flex items-center gap-8 text-sm h-full">
       {menu.map((item: Menu) => {
-        // Safe check for items
         const hasSubMenu = item.items && item.items.length > 0;
 
         return (
           <div
             key={item.title}
-            // STATIC position allows the absolute dropdown to position relative to the Header wrapper
             className="group static h-full flex items-center"
             onMouseEnter={() => setHoveredItem(item.title)}
             onMouseLeave={() => setHoveredItem(null)}
@@ -48,7 +46,7 @@ export default function DesktopNav({ menu }: { menu: Menu[] }) {
                     : 'opacity-0 invisible -translate-y-2 pointer-events-none'
                 )}
               >
-                {/* Dropdown Content Styling */}
+                {/* Dropdown Content  */}
                 <div className="bg-background/90 backdrop-blur-xl border border-[#b88d6a]/20 w-full py-8 rounded-2xl shadow-xl">
                   <div className="mx-auto max-w-7xl px-8 flex justify-center font-text">
                     <div className="grid grid-cols-4 gap-12 text-center">

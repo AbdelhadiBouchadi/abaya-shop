@@ -4,9 +4,6 @@ import { headers } from 'next/headers';
 import { TAGS } from '@/lib/constants';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  // We always need to respond with a 200 status code to Shopify,
-  // otherwise it will continue to retry the request.
-
   const collectionWebhooks = [
     'collections/create',
     'collections/delete',
@@ -30,7 +27,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   }
 
   if (!isCollectionUpdate && !isProductUpdate) {
-    // We don't need to revalidate anything for any other topics.
     return NextResponse.json({ status: 200 });
   }
 

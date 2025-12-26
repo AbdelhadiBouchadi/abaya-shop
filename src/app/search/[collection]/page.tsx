@@ -11,7 +11,6 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const resolvedParams = await params;
 
-  // Create a clean title (e.g., "Abayas" instead of "abayas")
   const title =
     resolvedParams.collection.charAt(0).toUpperCase() +
     resolvedParams.collection.slice(1);
@@ -46,12 +45,11 @@ export default async function CategoryPage({
 
   if (!products) return notFound();
 
-  // Formatting the title for display (e.g., "best-selling" -> "Best Selling")
   const displayTitle = resolvedParams.collection.replace(/-/g, ' ');
 
   return (
     <section>
-      {/* Cinematic Header matching your design language */}
+      {/* Cinematic Header */}
       <h1 className="mb-8 font-title text-3xl text-[#9d5035] uppercase md:text-5xl tracking-tight">
         {displayTitle}
       </h1>

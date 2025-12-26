@@ -1,6 +1,5 @@
 import { cn } from '@/lib/utils';
 
-// 1. Define a type for the Node structure to avoid 'any'
 type RichTextNode = {
   type: string;
   value?: string;
@@ -50,7 +49,7 @@ function RenderNodes({
   nodes,
   className,
 }: {
-  nodes: RichTextNode[]; // 3. Replaced 'any[]' with 'RichTextNode[]'
+  nodes: RichTextNode[];
   className?: string;
 }) {
   if (!nodes) return null;
@@ -61,7 +60,6 @@ function RenderNodes({
         if (node.type === 'paragraph') {
           return (
             <p key={i}>
-              {/* 4. Replaced 'child: any' with 'child: RichTextNode' */}
               {node.children?.map((child: RichTextNode, j: number) => {
                 if (child.bold) return <strong key={j}>{child.value}</strong>;
                 if (child.italic) return <em key={j}>{child.value}</em>;

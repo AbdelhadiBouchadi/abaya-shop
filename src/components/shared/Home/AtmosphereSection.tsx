@@ -6,8 +6,6 @@ import { FaArrowRight } from 'react-icons/fa';
 export default function AtmosphereSection() {
   return (
     <section className="relative w-full h-[70vh] md:h-[85vh] overflow-hidden flex items-center justify-center mt-16">
-      {/* 1. Background Video Wrapper */}
-      {/* Direct video file from public/atmospheric-video.mp4 */}
       <div className="absolute inset-0 pointer-events-none select-none">
         <video
           autoPlay
@@ -21,11 +19,10 @@ export default function AtmosphereSection() {
         </video>
       </div>
 
-      {/* 2. Earthy Overlay to dampen video brightness and tint it brown */}
       <div className="absolute inset-0 bg-[#3E2723]/40 mix-blend-multiply z-0" />
       <div className="absolute inset-0 bg-black/20 z-0" />
 
-      {/* 3. Glassmorphic Content Card (Kept exactly as is) */}
+      {/* 3. Glassmorphic Content Card  */}
       <div className="relative z-10 px-4 max-w-4xl mx-auto text-center">
         <div
           className="

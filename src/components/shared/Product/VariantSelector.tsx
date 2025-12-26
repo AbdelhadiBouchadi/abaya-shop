@@ -59,14 +59,10 @@ export function ProductVariantSelector({
               }
             });
 
-            // 3. Check Status
             const status = checkAvailability(checkMap);
             const isActive = searchParams.get(optionNameLowerCase) === value;
 
-            // 4. Create Click URL
             const clickUrl = createUrl(pathname, targetParams);
-
-            // 5. Get Dynamic Color (if applicable)
 
             const colorVariant = variants.find((v) =>
               v.selectedOptions.some(

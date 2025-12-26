@@ -16,9 +16,6 @@ export function ProductOptions({
   selectedOptions,
   setSelectedOptions,
 }: ProductOptionsProps) {
-  // 1. CHECK FOR DEFAULT VARIANT
-  // If there is only 1 option, and its name is "Title" (or value "Default Title"),
-  // it means the product is a "Simple Product" without variants. We should hide this UI.
   const isDefaultVariant =
     product.options.length === 1 &&
     (product.options[0].name === 'Title' ||

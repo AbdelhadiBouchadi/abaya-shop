@@ -31,9 +31,8 @@ export default function Search() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (isExpanded) {
-        // Expand
         gsap.to(containerRef.current, {
-          width: 'auto', // Or fixed width like 250px
+          width: 'auto',
           paddingRight: 16,
           duration: 0.4,
           ease: 'power2.out',
@@ -46,7 +45,6 @@ export default function Search() {
           ease: 'power2.out',
         });
       } else {
-        // Collapse
         gsap.to(containerRef.current, {
           width: 'auto',
           paddingRight: 0,
@@ -66,7 +64,6 @@ export default function Search() {
     return () => ctx.revert();
   }, [isExpanded]);
 
-  // Click outside to close
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -90,7 +87,7 @@ export default function Search() {
         isExpanded ? 'bg-background/50' : 'bg-transparent'
       )}
       style={{
-        borderColor: isExpanded ? '#e5e7eb' : 'transparent', // gray-200
+        borderColor: isExpanded ? '#e5e7eb' : 'transparent',
         boxShadow: isExpanded ? '0 4px 6px -1px rgb(0 0 0 / 0.1)' : 'none',
       }}
     >
@@ -98,7 +95,6 @@ export default function Search() {
         type="button"
         onClick={() => {
           if (isExpanded && inputRef.current?.value) {
-            // If expanded and has value, submit
             containerRef.current?.requestSubmit();
           } else {
             setIsExpanded(!isExpanded);

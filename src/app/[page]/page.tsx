@@ -39,7 +39,6 @@ export default async function Page({
     return notFound();
   }
 
-  // Format date (e.g., "Mise à jour le 24 décembre 2025")
   const date = new Date(page.updatedAt).toLocaleDateString('fr-FR', {
     day: 'numeric',
     month: 'long',

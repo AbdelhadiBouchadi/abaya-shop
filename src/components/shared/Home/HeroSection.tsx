@@ -17,7 +17,6 @@ export default function HeroSection() {
 
   useGSAP(
     () => {
-      // 1. Image subtle zoom effect (The "Slow Breath")
       gsap.fromTo(
         imageRef.current,
         { scale: 1.05 },
@@ -103,7 +102,6 @@ export default function HeroSection() {
             </p>
           </FadeIn>
 
-          {/* Button - Brown with Pistachio Hover */}
           <FadeIn className="mt-10" vars={{ delay: 1 }}>
             <Link href="/search">
               <button className="group relative overflow-hidden rounded-2xl bg-[#9d5035] px-8 py-4 transition-all duration-300 hover:shadow-lg cursor-pointer">

@@ -1,29 +1,29 @@
 'use server';
 
-export async function newsletterAction(prevState: any, formData: FormData) {
+type NewsletterState = {
+  success: boolean;
+  message: string;
+};
+
+export async function newsletterAction(
+  prevState: NewsletterState,
+  formData: FormData
+) {
   const email = formData.get('email') as string;
 
-  if (!email) {
-    return { success: false, message: 'Veuillez entrer une adresse email.' };
-  }
+  if (!email) return { success: false, message: 'Email required' };
 
   try {
-    // 1. Admin API Endpoint (Note the /admin/api/ part)
     const domain = process.env.SHOPIFY_STORE_DOMAIN;
-    const endpoint = `https://${domain}/admin/api/2025-10/graphql.json`;
+    const endpoint = `https://${domain}/api/2024-07/graphql.json`;
 
-    // 2. Admin Mutation: Create a customer with marketing consent directly
-    const adminMutation = `
-      mutation customerCreate($input: CustomerInput!) {
-        customerCreate(input: $input) {
+    const query = `
+      mutation customerSubscribe($email: String!) {
+        customerEmailMarketingSubscribe(email: $email) {
           customer {
-            id
             email
-            emailMarketingConsent {
-              marketingState
-            }
           }
-          userErrors {
+          customerUserErrors {
             field
             message
           }
@@ -35,41 +35,28 @@ export async function newsletterAction(prevState: any, formData: FormData) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-
-        'X-Shopify-Access-Token': process.env.SHOPIFY_ADMIN_ACCESS_TOKEN!,
+        'Shopify-Storefront-Private-Token':
+          process.env.SHOPIFY_STOREFRONT_PRIVATE_ACCESS_TOKEN!,
       },
       body: JSON.stringify({
-        query: adminMutation,
-        variables: {
-          input: {
-            email: email,
-            emailMarketingConsent: {
-              marketingState: 'SUBSCRIBED',
-              marketingOptInLevel: 'SINGLE_OPT_IN',
-            },
-            tags: ['newsletter-subscriber'],
-          },
-        },
+        query,
+        variables: { email },
       }),
       cache: 'no-store',
     });
 
     const json = await response.json();
 
+    // 4. Handle Errors
     if (json.errors) {
-      console.error('System Error:', json.errors);
+      console.error('System Error:', JSON.stringify(json.errors, null, 2));
       return { success: false, message: 'Erreur technique.' };
     }
 
-    const data = json.data?.customerCreate;
+    const data = json.data?.customerEmailMarketingSubscribe;
 
-    if (data?.userErrors?.length > 0) {
-      const msg = data.userErrors[0].message;
-
-      if (msg.toLowerCase().includes('taken')) {
-        return { success: true, message: 'Vous êtes déjà inscrit !' };
-      }
-      return { success: false, message: msg };
+    if (data?.customerUserErrors?.length > 0) {
+      return { success: false, message: data.customerUserErrors[0].message };
     }
 
     return { success: true, message: 'Merci pour votre inscription !' };

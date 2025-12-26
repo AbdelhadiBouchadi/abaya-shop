@@ -29,7 +29,6 @@ export const metadata: Metadata = {
     'Maroc',
   ],
 
-  // 3. Open Graph (Facebook, LinkedIn, WhatsApp previews)
   openGraph: {
     type: 'website',
     locale: 'fr_FR',
@@ -54,7 +53,6 @@ export const metadata: Metadata = {
     description: 'Élégance et pudeur sans compromis.',
   },
 
-  // 6. Favicons & Apple Touch Icons
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon-16x16.png',

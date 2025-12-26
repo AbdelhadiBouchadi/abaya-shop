@@ -8,7 +8,7 @@ import { createPortal } from 'react-dom';
 import { HiX, HiChevronDown, HiMenuAlt2 } from 'react-icons/hi';
 import gsap from 'gsap';
 import { Menu } from '@/lib/shopify/types';
-import { formatMenuUrl } from '@/lib/utils'; // Import the helper we created
+import { formatMenuUrl } from '@/lib/utils';
 import Search from './Search';
 
 // --- Sub-component for individual items ---
@@ -129,7 +129,6 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
   useEffect(() => {
     if (menuRef.current && backdropRef.current) {
       if (isOpen) {
-        // Lock body scroll
         document.body.style.overflow = 'hidden';
 
         gsap.to(menuRef.current, {

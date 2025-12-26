@@ -7,13 +7,12 @@ import { useCart } from '@/context/CartContext';
 import clsx from 'clsx';
 import { Plus } from 'lucide-react';
 
-// 1. Update Props Interface
 export function AddToCart({
   product,
   selectedVariantId,
 }: {
   product: Product;
-  selectedVariantId?: string; // Optional because initially no variant might be selected
+  selectedVariantId?: string;
 }) {
   const { openCart } = useCart();
   const [state, formAction, isPending] = useActionState(addItem, null);
@@ -22,7 +21,6 @@ export function AddToCart({
     selectedVariantId ||
     (product.variants.length === 1 ? product.variants[0]?.id : undefined);
 
-  // 3. Check Availability
   const variant = product.variants.find((v) => v.id === finalVariantId);
   const isAvailable = variant ? variant.availableForSale : false;
 
@@ -32,8 +30,6 @@ export function AddToCart({
     }
   }, [state, openCart]);
 
-  // 4. "Select Option" State
-  // If we have multiple variants but no ID is selected yet:
   if (!finalVariantId && product.variants.length > 1) {
     return (
       <button

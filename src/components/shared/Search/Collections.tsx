@@ -7,7 +7,6 @@ async function CollectionList() {
   return <FilterList list={collections} title="Collections" />;
 }
 
-// Skeleton loader matching your aesthetic
 const skeleton = 'mb-3 h-4 w-5/6 animate-pulse rounded bg-[#e8e0d9]';
 
 export default function Collections() {
@@ -16,7 +15,7 @@ export default function Collections() {
       fallback={
         <div className="hidden md:block py-4">
           <div className="mb-4 h-4 w-20 animate-pulse rounded bg-[#dcd0c6]" />{' '}
-          {/* Title */}
+          {/* Title  */}
           {[...Array(6)].map((_, i) => (
             <div key={i} className={skeleton} />
           ))}

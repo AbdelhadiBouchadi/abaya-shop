@@ -15,6 +15,7 @@ export default function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
+  // ... (Keep existing useGSAP logic) ...
   useGSAP(
     () => {
       gsap.fromTo(
@@ -55,29 +56,29 @@ export default function HeroSection() {
       >
         <Image
           ref={imageRef}
-          src="/hero/hero-image.jpg"
+          src="/hero/hero-image-new.jpg"
           alt="Collection Waliliya - Élégance et Modestie"
           fill
           priority
           className="object-fill motion-reduce:opacity-50"
         />
-        {/* Soft Overlay to ensure text readability (Beige/Warm tint) */}
-        <div className="absolute inset-0 bg-[#3E2723]/5 mix-blend-multiply" />
+        {/* UPDATED: Overlay tint is now Olive (#737b4c) based to warm it up towards green */}
+        <div className="absolute inset-0 bg-[#737b4c]/10 mix-blend-multiply" />
         <div className="absolute inset-0 bg-linear-to-t from-[#F5F5F0]/10 via-transparent to-transparent" />
       </FadeIn>
 
       {/* --- Content --- */}
       <Bounded className="relative flex h-full flex-col justify-center pt-20">
         <div className="max-w-3xl">
-          {/* Small Tagline - Pistachio Accent */}
+          {/* UPDATED: Tagline is Olive Green */}
           <FadeIn vars={{ delay: 0.2 }}>
-            <span className="font-subtitle text-sm md:text-base font-semibold tracking-widest uppercase text-[#9d5035] mb-4 block pl-1">
+            <span className="font-subtitle text-sm md:text-base font-semibold tracking-widest uppercase text-[#737b4c] mb-4 block pl-1">
               Nouvelles Collections
             </span>
           </FadeIn>
 
-          {/* Main Headline - Dark Brown  */}
-          <div className="font-title text-[#9d5035]">
+          {/* UPDATED: Main Headline is Olive Green */}
+          <div className="font-title text-[#737b4c]">
             <RevealText
               text="L'Élégance"
               className="text-5xl md:text-7xl font-medium mb-4"
@@ -90,9 +91,9 @@ export default function HeroSection() {
             />
           </div>
 
-          {/* Subtext - Brown/Gray */}
+          {/* UPDATED: Subtext is Olive Green (slightly transparent) */}
           <FadeIn
-            className="mt-6 max-w-lg text-lg md:text-xl text-[#9d5035]/95 font-text leading-relaxed pl-1"
+            className="mt-6 max-w-lg text-lg md:text-xl text-[#737b4c]/95 font-text leading-relaxed pl-1"
             vars={{ delay: 0.8 }}
           >
             <p>
@@ -104,11 +105,12 @@ export default function HeroSection() {
 
           <FadeIn className="mt-10" vars={{ delay: 1 }}>
             <Link href="/search">
-              <button className="group relative overflow-hidden rounded-2xl bg-[#9d5035] px-8 py-4 transition-all duration-300 hover:shadow-lg cursor-pointer">
-                {/* Background transition on hover */}
-                <div className="absolute inset-0 translate-y-full bg-[#b88d6a] transition-transform duration-300 ease-in-out group-hover:translate-y-0" />
+              {/* UPDATED: Button BG is Olive Green (#737b4c) */}
+              <button className="group relative overflow-hidden rounded-2xl bg-[#737b4c] px-8 py-4 transition-all duration-300 hover:shadow-lg cursor-pointer">
+                {/* UPDATED: Button Hover fill is Rust Brown (#9d5035) */}
+                <div className="absolute inset-0 translate-y-full bg-[#d1fa9d] transition-transform duration-300 ease-in-out group-hover:translate-y-0" />
 
-                <span className="relative flex items-center gap-2 font-subtitle text-sm font-bold uppercase tracking-wide text-[#F5F5F0] transition-colors duration-300 group-hover:text-[#9d5035]">
+                <span className="relative flex items-center gap-2 font-subtitle text-sm font-bold uppercase tracking-wide text-[#F5F5F0] transition-colors duration-300 group-hover:text-white">
                   Découvrir Nos collections
                   <svg
                     width="12"

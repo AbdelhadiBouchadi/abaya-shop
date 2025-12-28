@@ -45,10 +45,9 @@ export default function CartButton() {
           ease-[cubic-bezier(0.68,-0.55,0.27,1.55)] 
           hover:scale-110 hover:shadow-lg 
           active:scale-95 active:shadow-inner 
-          hover:bg-[#9d5035]
-          bg-[#b88d6a]"
+          bg-[#d1fa9d] hover:bg-[#737b4c]"
       >
-        <FaShoppingBag className="text-lg font-light text-gray-200" />
+        <FaShoppingBag className="text-lg font-light text-gray-400" />
         {isMounted && cartCount > 0 && (
           <span className="absolute -top-1 -right-1 text-[13px] bg-[#9d5035] text-gray-200 px-1.5 rounded-full shadow-md">
             {cartCount}

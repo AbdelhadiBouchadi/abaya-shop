@@ -24,14 +24,7 @@ export default function AtmosphereSection() {
 
       {/* 3. Glassmorphic Content Card  */}
       <div className="relative z-10 px-4 max-w-4xl mx-auto text-center">
-        <div
-          className="
-            backdrop-blur-xl bg-[#fbf7f3]/10 border border-[#fbf7f3]/20 
-            shadow-2xl rounded-2xl p-8 md:p-16
-            flex flex-col items-center gap-6
-            animate-fade-in-up
-          "
-        >
+        <div className="backdrop-blur-xl bg-[#fbf7f3]/10 border border-[#fbf7f3]/20 shadow-2xl rounded-2xl p-8 md:p-16 flex flex-col items-center gap-6 animate-fade-in-up">
           <span className="text-[#fbf7f3] text-xs md:text-sm font-bold tracking-[0.2em] uppercase opacity-90">
             L&apos;Élégance au Naturel
           </span>

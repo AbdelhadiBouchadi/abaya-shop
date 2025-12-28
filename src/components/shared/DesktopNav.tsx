@@ -23,7 +23,7 @@ export default function DesktopNav({ menu }: { menu: Menu[] }) {
           >
             <Link
               href={item.url}
-              className="flex items-center gap-1 text-[#b88d6a] hover:text-[#9d5035] transition-colors font-medium uppercase tracking-wide py-4 relative z-10 font-text"
+              className="flex items-center gap-1 text-[#d1fa9d] hover:text-[#737b4c] transition-colors font-medium uppercase tracking-wide py-4 relative z-10 font-text"
             >
               {item.title}
               {hasSubMenu && (
@@ -46,15 +46,16 @@ export default function DesktopNav({ menu }: { menu: Menu[] }) {
                     : 'opacity-0 invisible -translate-y-2 pointer-events-none'
                 )}
               >
-                {/* Dropdown Content  */}
-                <div className="bg-background/90 backdrop-blur-xl border border-[#b88d6a]/20 w-full py-8 rounded-2xl shadow-xl">
+                {/* Dropdown Content */}
+                {/* UPDATED: Border uses greenish tint */}
+                <div className="bg-background/90 backdrop-blur-xl border border-[#737b4c]/20 w-full py-8 rounded-2xl shadow-xl">
                   <div className="mx-auto max-w-7xl px-8 flex justify-center font-text">
                     <div className="grid grid-cols-4 gap-12 text-center">
                       {(item.items || []).map((subItem) => (
                         <div key={subItem.title} className="space-y-3">
                           <Link
                             href={subItem.url}
-                            className="block text-base font-semibold text-[#3E2723] hover:text-[#9d5035] transition-colors mb-2"
+                            className="block text-base font-semibold text-[#d1fa9d] hover:text-[#737b4c] transition-colors mb-2"
                           >
                             {subItem.title}
                           </Link>

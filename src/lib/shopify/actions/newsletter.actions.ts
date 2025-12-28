@@ -47,7 +47,6 @@ export async function newsletterAction(
 
     const json = await response.json();
 
-    // 4. Handle Errors
     if (json.errors) {
       console.error('System Error:', JSON.stringify(json.errors, null, 2));
       return { success: false, message: 'Erreur technique.' };

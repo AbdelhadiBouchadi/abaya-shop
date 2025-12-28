@@ -182,7 +182,6 @@ export async function getMenu(handle: string): Promise<Menu[]> {
         .replace(domain, '')
         .replace('/collections', '/search')
         .replace('/pages', ''),
-      // The key fix: Recursively map children if they exist
       items: item.items ? item.items.map(mapMenuItem) : [],
     };
   };
@@ -265,7 +264,6 @@ export async function getCollections(): Promise<Collection[]> {
       path: '/search',
       updatedAt: new Date().toISOString(),
     },
-    // Filter out the hidden products
     ...reshapeCollections(shopifyCollections).filter(
       (collection) => !collection.handle.startsWith('hidden')
     ),
@@ -334,7 +332,7 @@ function reshapeCart(cart: ShopifyCart): Cart {
   if (!cart.cost?.totalTaxAmount) {
     cart.cost.totalTaxAmount = {
       amount: '0.0',
-      currencyCode: 'USD',
+      currencyCode: 'MAD',
     };
   }
 
@@ -364,7 +362,6 @@ export async function getCart(
     tags: [TAGS.cart],
   });
 
-  // old carts becomes 'null' when you checkout
   if (!res.body.data.cart) {
     return undefined;
   }
@@ -441,7 +438,6 @@ type ShopifyFAQOperation = {
 };
 
 export async function getFAQ(): Promise<Record<string, FAQItem[]>> {
-  // FIX 1: Use the operation type instead of <any>
   const res = await shopifyFetch<ShopifyFAQOperation>({
     query: getFAQQuery,
     tags: ['faq'],
@@ -466,7 +462,6 @@ export async function getFAQ(): Promise<Record<string, FAQItem[]>> {
 
     if (!grouped[cat]) grouped[cat] = [];
 
-    // Ensure values exist before pushing (fallback to empty string if undefined)
     if (item.question?.value && item.answer?.value) {
       grouped[cat].push({
         question: item.question.value,

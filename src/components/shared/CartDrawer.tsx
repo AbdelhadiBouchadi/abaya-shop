@@ -22,7 +22,7 @@ export default function CartDrawer({
   const backdropRef = useRef<HTMLDivElement>(null);
 
   const totalPrice = cart ? Number.parseFloat(cart.cost.totalAmount.amount) : 0;
-  const currencyCode = cart?.cost.totalAmount.currencyCode || 'USD';
+  const currencyCode = cart?.cost.totalAmount.currencyCode || 'MAD';
 
   const [mounted, setMounted] = useState(false);
 

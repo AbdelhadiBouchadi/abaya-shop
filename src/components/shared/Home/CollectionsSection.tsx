@@ -70,11 +70,11 @@ const PortraitCard = ({
         <div className="absolute inset-0 bg-black/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
         {/* Floating Text (Bottom Left) */}
-        <div className="absolute bottom-4 left-4 z-10 text-[#5D4037] font-semibold">
+        <div className="absolute bottom-4 left-4 z-10 text-[#737b4c] font-semibold">
           <p className="font-subtitle text-xs font-bold uppercase tracking-widest drop-shadow-md">
             Collection
           </p>
-          <h3 className="font-title text-xl drop-shadow-md md:text-2xl">
+          <h3 className="font-title text-xl drop-shadow-md md:text-2xl ">
             {collection.title}
           </h3>
         </div>
@@ -134,7 +134,7 @@ const LandscapeCard = ({ collection }: { collection: Collection }) => {
         <div className="absolute inset-0 bg-black/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
         {/* Floating Text (Bottom Left) - Matching Portrait Style */}
-        <div className="absolute bottom-4 left-4 z-10 text-[#5D4037]">
+        <div className="absolute bottom-4 left-4 z-10 text-[#737b4c]">
           <p className="font-subtitle text-xs font-bold uppercase tracking-widest drop-shadow-md">
             Collection
           </p>

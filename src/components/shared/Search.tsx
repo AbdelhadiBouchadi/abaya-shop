@@ -101,7 +101,7 @@ export default function Search() {
             if (!isExpanded) setTimeout(() => inputRef.current?.focus(), 100);
           }
         }}
-        className="p-2 text-[#b88d6a] hover:text-[#9d5035]  cursor-pointer shrink-0 z-10 transition-all duration-300 
+        className="p-2 text-[#d1fa9d] hover:text-[#737b4c]  cursor-pointer shrink-0 z-10 transition-all duration-300 
           ease-[cubic-bezier(0.68,-0.55,0.27,1.55)] 
           hover:scale-110 hover:shadow-lg"
         aria-label="Search"
@@ -124,7 +124,7 @@ export default function Search() {
         <button
           type="button"
           onClick={() => setIsExpanded(false)}
-          className="text-gray-400 hover:text-gray-600 pr-1"
+          className="text-[#d1fa9d] hover:text-[#737b4c] pr-1"
         >
           <HiX className="h-4 w-4" />
         </button>

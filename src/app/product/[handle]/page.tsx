@@ -59,7 +59,7 @@ export default async function ProductPage({
 
   return (
     <ProductProvider>
-      <div className="bg-[#fffdfa] min-h-screen pt-24 md:pt-32 pb-20">
+      <div className="min-h-screen pt-24 md:pt-32 pb-20">
         <div className="mx-auto max-w-360 px-6">
           <ProductDetails product={product} />
           <RelatedProducts products={relatedProducts} />

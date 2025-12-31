@@ -14,8 +14,8 @@ const contactInfo = [
   },
   {
     icon: <MdPhone />,
-    text: '+212-666666666',
-    href: 'tel:+212666666666',
+    text: '+212 07 08 25 23 84',
+    href: 'tel:+2120708252384',
   },
   {
     icon: <MdLocationOn />,

@@ -26,9 +26,10 @@ function MenuItemTree({
   const subMenuRef = useRef<HTMLUListElement>(null);
   const arrowRef = useRef<HTMLSpanElement>(null);
 
+  // Use the helper to clean the URL
   const itemUrl = formatMenuUrl(item.url);
 
-  // ... (Keep existing useEffect for GSAP animation) ...
+  // Animate Submenu Height
   useEffect(() => {
     if (hasSubItems && subMenuRef.current) {
       if (isExpanded) {
@@ -63,10 +64,9 @@ function MenuItemTree({
           href={itemUrl}
           onClick={closeMenu}
           className={`flex-1 ${
-            // UPDATED: Main links are Olive Green (#737b4c)
             level === 0
-              ? 'font-title text-lg font-medium text-[#737b4c]'
-              : 'font-text text-base text-[#737b4c]/90'
+              ? 'font-title text-lg font-medium text-[#3E2723]'
+              : 'font-text text-base text-[#5D4037]'
           }`}
         >
           {item.title}
@@ -78,8 +78,7 @@ function MenuItemTree({
               e.preventDefault();
               setIsExpanded(!isExpanded);
             }}
-            // UPDATED: Arrow color to Rust (#9d5035) for contrast
-            className="p-2 text-[#9d5035] active:scale-95 transition-transform"
+            className="p-2 text-[#b88d6a] active:scale-95 transition-transform"
             aria-label={isExpanded ? 'Collapse' : 'Expand'}
           >
             <span ref={arrowRef} className="block">
@@ -93,8 +92,7 @@ function MenuItemTree({
       {hasSubItems && (
         <ul
           ref={subMenuRef}
-          // UPDATED: Border line is now Olive Green (#737b4c)
-          className="h-0 opacity-0 overflow-hidden border-l border-[#737b4c]/20 ml-4"
+          className="h-0 opacity-0 overflow-hidden border-l border-[#b88d6a]/20 ml-4"
         >
           {item.items!.map((subItem) => (
             <MenuItemTree
@@ -173,7 +171,7 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
       <div className="xl:hidden">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="text-3xl cursor-pointer text-[#d1fa9d] hover:text-[#737b4c] transition-colors p-1"
+          className="text-3xl cursor-pointer text-[#9d5035] hover:text-[#b88d6a] transition-colors p-1"
           aria-label="Toggle menu"
         >
           {isOpen ? <HiX /> : <HiMenuAlt2 />}
@@ -201,7 +199,7 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
               <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-[#F5F5F0]/50 shrink-0">
                 <Link href="/" onClick={() => setIsOpen(false)}>
                   <Image
-                    src="/logo-green.png"
+                    src="/Logo.png"
                     alt="Waliliya logo"
                     width={80}
                     height={80}
@@ -209,7 +207,7 @@ export default function MobileMenu({ menu }: { menu: Menu[] }) {
                 </Link>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-2 text-[#d1fa9d] hover:text-[#737b4c]"
+                  className="p-2 text-gray-500 hover:text-[#9d5035]"
                 >
                   <HiX className="text-2xl" />
                 </button>

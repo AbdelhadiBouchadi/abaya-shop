@@ -15,7 +15,6 @@ export default function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
 
-  // ... (Keep existing useGSAP logic) ...
   useGSAP(
     () => {
       gsap.fromTo(
@@ -56,14 +55,14 @@ export default function HeroSection() {
       >
         <Image
           ref={imageRef}
-          src="/hero/hero-image-new.jpg"
+          src="/hero/hero-image.jpg"
           alt="Collection Waliliya - Élégance et Modestie"
           fill
           priority
           className="object-fill motion-reduce:opacity-50"
         />
-        {/* UPDATED: Overlay tint is now Olive (#737b4c) based to warm it up towards green */}
-        <div className="absolute inset-0 bg-[#737b4c]/10 mix-blend-multiply" />
+        {/* Soft Overlay to ensure text readability (Beige/Warm tint) */}
+        <div className="absolute inset-0 bg-[#3E2723]/5 mix-blend-multiply" />
         <div className="absolute inset-0 bg-linear-to-t from-[#F5F5F0]/10 via-transparent to-transparent" />
       </FadeIn>
 
@@ -72,13 +71,13 @@ export default function HeroSection() {
         <div className="max-w-3xl">
           {/* UPDATED: Tagline is Olive Green */}
           <FadeIn vars={{ delay: 0.2 }}>
-            <span className="font-subtitle text-sm md:text-base font-semibold tracking-widest uppercase text-[#737b4c] mb-4 block pl-1">
+            <span className="font-subtitle text-sm md:text-base font-semibold tracking-widest uppercase text-[#9d5035] mb-4 block pl-1">
               Nouvelles Collections
             </span>
           </FadeIn>
 
           {/* UPDATED: Main Headline is Olive Green */}
-          <div className="font-title text-[#737b4c]">
+          <div className="font-title text-[#9d5035]">
             <RevealText
               text="L'Élégance"
               className="text-5xl md:text-7xl font-medium mb-4"
@@ -93,7 +92,7 @@ export default function HeroSection() {
 
           {/* UPDATED: Subtext is Olive Green (slightly transparent) */}
           <FadeIn
-            className="mt-6 max-w-lg text-lg md:text-xl text-[#737b4c]/95 font-text leading-relaxed pl-1"
+            className="mt-6 max-w-lg text-lg md:text-xl text-[#9d5035]/95 font-text leading-relaxed pl-1"
             vars={{ delay: 0.8 }}
           >
             <p>

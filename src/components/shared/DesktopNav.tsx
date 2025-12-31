@@ -23,7 +23,7 @@ export default function DesktopNav({ menu }: { menu: Menu[] }) {
           >
             <Link
               href={item.url}
-              className="flex items-center gap-1 text-[#d1fa9d] hover:text-[#737b4c] transition-colors font-medium uppercase tracking-wide py-4 relative z-10 font-text"
+              className="flex items-center gap-1 text-[#b88d6a] hover:text-[#9d5035] transition-colors font-medium uppercase tracking-wide py-4 relative z-10 font-text"
             >
               {item.title}
               {hasSubMenu && (
@@ -55,7 +55,7 @@ export default function DesktopNav({ menu }: { menu: Menu[] }) {
                         <div key={subItem.title} className="space-y-3">
                           <Link
                             href={subItem.url}
-                            className="block text-base font-semibold text-[#d1fa9d] hover:text-[#737b4c] transition-colors mb-2"
+                            className="block text-base font-semibold text-[#b88d6a] hover:text-[#9d5035] transition-colors mb-2"
                           >
                             {subItem.title}
                           </Link>

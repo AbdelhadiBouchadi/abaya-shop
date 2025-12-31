@@ -49,7 +49,7 @@ export default async function Footer() {
     'font-title font-semibold text-sm mb-6 text-[#3E2723] uppercase tracking-wider';
 
   return (
-    <footer className="bg-[#9d5035]/30 text-gray-800 font-text border-t border-[#b88d6a]/20">
+    <footer className="bg-[#737b4c]/45 text-gray-800 font-text border-t border-[#737b4c]/20">
       {/* Top Section: 4 Columns Grid */}
       <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 items-start">
         {/* Column 1: Collections  */}
